@@ -9,7 +9,7 @@ Introduction
 This is a basic implementation of the Matlab toolkit extension.
 
 It attempts to provide the same function calls as the Matlab toolkit, as well as additional functionality, **HOWEVER**,
-it is not binary compatible with matlab. (ie: you must program the arduino with the GNU octave code to commuicate with the
+it is not binary compatible with Matlab. (ie: you must program the arduino with the GNU octave code to communicate with the
 octave arduino toolkit).
 
 Requirements
@@ -54,7 +54,7 @@ Usage:
 
     `a = arduino ()`
 
-    **NOTE**: the board MUST be programmed before the ardino function call will be abele to open the board connection.
+    **NOTE**: the board MUST be programmed before the arduino function call will be able to open the board connection.
 
 4. Use the arduino function calls to control arduino hardware.
    See the function list and examples directories.
