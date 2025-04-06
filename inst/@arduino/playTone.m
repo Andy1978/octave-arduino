@@ -1,16 +1,16 @@
 ## Copyright (C) 2018-2021 John Donoghue <john.donoghue@ieee.org>
-## 
+##
 ## This program is free software: you can redistribute it and/or modify it
 ## under the terms of the GNU General Public License as published by
 ## the Free Software Foundation, either version 3 of the License, or
 ## (at your option) any later version.
-## 
+##
 ## This program is distributed in the hope that it will be useful, but
 ## WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
 
-## -*- texinfo -*- 
+## -*- texinfo -*-
 ## @deftypefn {} {} playTone (@var{ar}, @var{pin}, @var{freq}, @var{duration})
 ## Play a tone of a given frequency on a specified pin.
 ##
@@ -43,11 +43,11 @@ function playTone (obj, pin, freq, duration)
   endif
   if (!isnumeric(freq) || freq < 0 || freq > 32767)
     error ("@arduino.playTone: expected freq between 0 .. 32767");
-  endif  
+  endif
   if (!isnumeric(duration) || duration < 0 || duration > 30)
     error ("@arduino.playTone: expected duration between 0 .. 30");
-  endif  
-  
+  endif
+
   pininfo = obj.get_pin(pin);
 
   # first use ?
@@ -69,13 +69,13 @@ function playTone (obj, pin, freq, duration)
   durl = bitand(duration, hex2dec('FF'));
 
   datain = uint8([pininfo.id freqh freql durh durl]);
-  
+
   [dataout, status] = __sendCommand__ (obj, 0, ARDUINO_PLAYTONE, datain);
-  
+
   if status != 0
     error ("@arduino.playTone: failed to set tone err=%d - %s", status, char(dataout));
-  endif 
- 
+  endif
+
 endfunction
 
 %!shared ar

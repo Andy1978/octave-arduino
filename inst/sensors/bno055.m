@@ -4,18 +4,18 @@
 ## under the terms of the GNU General Public License as published by
 ## the Free Software Foundation, either version 3 of the License, or
 ## (at your option) any later version.
-## 
+##
 ## This program is distributed in the hope that it will be useful, but
 ## WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
-## 
+##
 ## You should have received a copy of the GNU General Public License
 ## along with this program.  If not, see
 ## <https://www.gnu.org/licenses/>.
 
 classdef bno055 < handle
-  ## -*- texinfo -*- 
+  ## -*- texinfo -*-
   ## @deftypefn {} {} bno055
   ## BNO055 9 axis orientation sensor
   ## @end deftypefn
@@ -121,7 +121,7 @@ classdef bno055 < handle
   ##
   ## @var{timestamp} - timestamp when read
   ## @end deftypefn
-  ## 
+  ##
   ## @deftypefn {} {[@var{readings}, @var{overrun}] =} read(@var{obj})
   ## @deftypefnx {} {[@var{accel}, @var{gyro}, @var{mag}, @var{timestamp}, @var{overrun}] =} read(@var{obj})
   ## @deftypefnx {} {[@var{accel}, @var{gyro}, @var{mag}, @var{orientation}, @var{timestamp}, @var{overrun}] =} read(@var{obj})
@@ -145,7 +145,7 @@ classdef bno055 < handle
   ##
   ## @var{readings} - table structure with fields for Timestamp, Acceleration, AngularVelocity, MagneticField, Orientation.
   ## @end deftypefn
-  ## 
+  ##
   ## @deftypefn {} {@var{inf} =} readCalibrationStatus(@var{obj})
   ## Read the sensor calibration status
   ##
@@ -170,7 +170,7 @@ classdef bno055 < handle
   ## Values for each will be either 'uncalibrated', 'partial' or 'full'.
   ##
   ## @end deftypefn
-  ## 
+  ##
   ## @deftypefn {} {@var{inf} =} info(@var{obj})
   ## Read the sensor info
   ##
@@ -211,7 +211,7 @@ classdef bno055 < handle
   ## @subsubheading Outputs
   ## None
   ## @end deftypefn
- 
+
   properties(Access = private, constant = true)
 
     # page 0
@@ -227,7 +227,7 @@ classdef bno055 < handle
     BNO055_REG_BL_REV_ID = 0x06; # 0x15 Bootloader Version
 
     BNO055_REG_PAGE_ID = 0x07; # 0x00 Page ID
-    
+
     BNO055_REG_ACC_DATA_X = 0x08;
     BNO055_REG_ACC_DATA_X_LSB = 0x08; # 0x00 Acceleration Data X <7:0>
     BNO055_REG_ACC_DATA_X_MSB = 0x09; # 0x00 Acceleration Data X <15:8>
@@ -319,7 +319,7 @@ classdef bno055 < handle
     BNO055_REG_TEMP = 0x34; # 0x00 Temperature
 
     BNO055_REG_CALIB_STAT = 0x35; # 0x00 SYS Calib Status 0:3 GYR Calib Status 0:3 ACC Calib Status 0:3 MAG Calib Status 0:3
-    BNO055_REG_ST_RESULT = 0x36; # 0x0F ST_MCU ST_GYR ST_MAG ST_ACC 
+    BNO055_REG_ST_RESULT = 0x36; # 0x0F ST_MCU ST_GYR ST_MAG ST_ACC
     BNO055_REG_INT_STA = 0x37; # 0x00 ACC_N M ACC_A M ACC_HI GH_G GYR_DR DY6 GYR_HIG H_RATE GYRO_A M MAG_DR DY6 ACC_BS X_DRDY6
     BNO055_REG_SYS_CLK_STATUS = 0x38; # 0x00 ST_MAI N_CLK
     BNO055_REG_SYS_STATUS = 0x39; # 0x00 System Status Code
@@ -378,7 +378,7 @@ classdef bno055 < handle
     BNO055_REG_MAG_RADIUS_MSB = 0x6A; # 0x01 Magnetometer Radius
 
   endproperties
-  
+
   properties(Access = private)
     i2c;
     caldata = {};
@@ -441,7 +441,7 @@ classdef bno055 < handle
 
       # reset
       this.writeRegister(this.BNO055_REG_SYS_TRIGGER, 0x20);
- 
+
       pause(.5);
 
       id = this.readRegisterU8(this.BNO055_REG_CHIP_ID);
@@ -454,7 +454,7 @@ classdef bno055 < handle
       this.writeRegister(this.BNO055_REG_PWR_MODE, 0);
       # page 0
       this.writeRegister(this.BNO055_REG_PAGE_ID, 0);
-      
+
       this.writeRegister(this.BNO055_REG_SYS_TRIGGER, 0x00);
       pause(.1);
 
@@ -554,7 +554,7 @@ classdef bno055 < handle
         if nargout > 2
           varargout{3} = mag;
         endif
-      
+
         if nargout == 5
           varargout{4} = timestamp;
           varargout{5} = 0; # overrun

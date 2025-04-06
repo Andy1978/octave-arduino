@@ -1,22 +1,22 @@
 ## Copyright (C) 2018-2019 John Donoghue <john.donoghue@ieee.org>
-## 
+##
 ## This program is free software: you can redistribute it and/or modify it
 ## under the terms of the GNU General Public License as published by
 ## the Free Software Foundation, either version 3 of the License, or
 ## (at your option) any later version.
-## 
+##
 ## This program is distributed in the hope that it will be useful, but
 ## WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
-## 
+##
 ## You should have received a copy of the GNU General Public License
 ## along with this program.  If not, see
 ## <https://www.gnu.org/licenses/>.
 
 
 classdef LibraryBase < handle
-  ## -*- texinfo -*- 
+  ## -*- texinfo -*-
   ## @deftypefn {} {} arduinoio.LibraryBase
   ## Base class used for arduino library plugins
   ##
@@ -24,8 +24,8 @@ classdef LibraryBase < handle
   ## @end deftypefn
   ##
   ## @subheading Properties
-  ## Base properties are expected to be inherited and overwritten in 
-  ## inherited classes and are constant in order to query through the 
+  ## Base properties are expected to be inherited and overwritten in
+  ## inherited classes and are constant in order to query through the
   ## metaobject mechanism.
   ##
   ## @var{LibraryName} - name of the addon library
@@ -63,7 +63,7 @@ classdef LibraryBase < handle
   ## Display the addon in a verbose way.
   ## @end deftypefn
 
-  # properties that may be overridden in 
+  # properties that may be overridden in
   # subclasses
   properties (Access = protected)
     LibraryName = "<none set>";
@@ -73,12 +73,12 @@ classdef LibraryBase < handle
     CppSourceFile = "";
     CppClassName = "";
   endproperties
-  
-  properties (GetAccess = public, SetAccess = protected)  
+
+  properties (GetAccess = public, SetAccess = protected)
     Parent = {};
     Pins = [];
   endproperties
-  
+
   methods (Static)
     function info = AddonInfo(fullclassname)
       info = {};
@@ -88,7 +88,7 @@ classdef LibraryBase < handle
       info.cppsourcefile = "";
       info.cppclassname = "";
       info.arduinolibraryheaderfiles = "";
- 
+
       data = meta.class.fromName(fullclassname);
 
       for ic = 1:numel(data.Properties)
@@ -129,7 +129,7 @@ classdef LibraryBase < handle
     # overrides of arduino that matlab documentation indirectly
     # seems to indicate in the examples
     function [dataout, datasize] = sendCommand(this, varargin)
-      [dataout, datasize] = sendCommand(this.Parent, varargin{:}) 
+      [dataout, datasize] = sendCommand(this.Parent, varargin{:})
     endfunction
 
   endmethods

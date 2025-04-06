@@ -1,20 +1,20 @@
 ## Copyright (C) 2018-2019 John Donoghue <john.donoghue@ieee.org>
-## 
+##
 ## This program is free software: you can redistribute it and/or modify it
 ## under the terms of the GNU General Public License as published by
 ## the Free Software Foundation, either version 3 of the License, or
 ## (at your option) any later version.
-## 
+##
 ## This program is distributed in the hope that it will be useful, but
 ## WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
-## 
+##
 ## You should have received a copy of the GNU General Public License
 ## along with this program.  If not, see
 ## <https://www.gnu.org/licenses/>.
 
-## -*- texinfo -*- 
+## -*- texinfo -*-
 ## @deftypefn {} {@var{currmode} =} configurePinResource (@var{ar}, @var{pin})
 ## @deftypefnx {} {} configurePinResource (@var{ar}, @var{pin}, @var{owner}, @var{mode})
 ## @deftypefnx {} {} configurePinResource (@var{ar}, @var{pin}, @var{owner}, @var{mode}, @var{force})
@@ -56,7 +56,7 @@
 ## - Specify pin to use a pullup switch
 ## @item PWM
 ## - Specify pin to use a pulse width modulator
-## @item Servo 
+## @item Servo
 ## - Specify pin to use a servo
 ## @item SPI
 ## - Specify a pin to use with SPI protocol
@@ -73,24 +73,24 @@
 ## @end deftypefn
 
 function retval = configurePinResource (obj, pin, owner, mode, forceconfig)
-  if nargin != 2 && nargin != 4 && nargin != 5 
+  if nargin != 2 && nargin != 4 && nargin != 5
     error ('@arduino.configurePinResource: invalid number of arduments supplied');
   endif
-  
+
   if !ischar(pin)
     error ("@arduino.configurePinResource: expected pin name as string");
   endif
-  
+
   pininfo = obj.get_pin (pin);
 
   if nargin == 2
     % return current mode
     retval = pininfo.mode;
-  else 
+  else
     if nargin == 4
       forceconfig = false;
     endif
-  
+
     if !isempty (pininfo.owner) && !strcmpi (pininfo.owner, owner) && !forceconfig
       error ("@arduino.configurePinResource: pin already owned");
     endif
@@ -102,14 +102,14 @@ function retval = configurePinResource (obj, pin, owner, mode, forceconfig)
     if (strcmpi (mode, "unset"))
       owner = "";
     endif
-    
+
     pininfo.owner = owner;
     pininfo.mode = mode;
-    
+
     obj.set_pin (pin, pininfo);
-  
+
   endif
-  
+
 endfunction
 
 %!shared ar

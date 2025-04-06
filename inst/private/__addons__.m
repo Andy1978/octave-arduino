@@ -1,20 +1,20 @@
 ## Copyright (C) 2018-2022 John Donoghue <john.donoghue@ieee.org>
-## 
+##
 ## This program is free software: you can redistribute it and/or modify it
 ## under the terms of the GNU General Public License as published by
 ## the Free Software Foundation, either version 3 of the License, or
 ## (at your option) any later version.
-## 
+##
 ## This program is distributed in the hope that it will be useful, but
 ## WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
-## 
+##
 ## You should have received a copy of the GNU General Public License
 ## along with this program.  If not, see
 ## <https://www.gnu.org/licenses/>.
 
-## -*- texinfo -*- 
+## -*- texinfo -*-
 ## @deftypefn {} {@var{retval} =} __addons__ ()
 ## Private function to get information aabout all user
 ## plugins
@@ -35,7 +35,7 @@ function addonfiles = __addons__ ()
       addondirs{end+1} = checkpath;
     endif
   endfor
-  
+
   # we expect <+arduinoioaddons>/+AddonFolderName/<Addonname.m>
   for i=1:numel (addondirs)
     files = dir (addondirs{i});
@@ -89,7 +89,7 @@ function retval = is_arduino_addon_class(classname)
         if size(classinfo.SuperClassList) > 0
           idx = find( cellfun(@(x) strcmpi(x.Name, "arduinoio.LibraryBase"), classinfo.SuperClassList), 1);
           retval = !isempty(idx);
-  
+
           if retval == false
             idx = cellfun(@(x) (is_arduino_addon_class(x.Name) == true), classinfo.SuperClassList);
             retval = !isempty(idx);

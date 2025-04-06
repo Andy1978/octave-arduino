@@ -2,23 +2,23 @@
 ##
 ## Conversion routines based on code from the BME280 datasheet
 ## revision 1.6, Document number BST-BME280-DS002-15.
-## 
+##
 ## This program is free software: you can redistribute it and/or modify it
 ## under the terms of the GNU General Public License as published by
 ## the Free Software Foundation, either version 3 of the License, or
 ## (at your option) any later version.
-## 
+##
 ## This program is distributed in the hope that it will be useful, but
 ## WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
-## 
+##
 ## You should have received a copy of the GNU General Public License
 ## along with this program.  If not, see
 ## <https://www.gnu.org/licenses/>.
 
 classdef bme280 < handle
-  ## -*- texinfo -*- 
+  ## -*- texinfo -*-
   ## @deftypefn {} {} bme280
   ## BME280 pressure, temperature and humidity sensor
   ## @end deftypefn
@@ -98,7 +98,7 @@ classdef bme280 < handle
   ##
   ## @var{timestamp} - timestamp when read
   ## @end deftypefn
-  ## 
+  ##
   ## @deftypefn {} {[@var{readings}, @var{overrun}] =} read(@var{obj})
   ## @deftypefnx {} {[@var{P}, @var{H}, @var{C}, @var{timestamp}, @var{overrun}] =} read(@var{obj})
   ## Read the sensor data
@@ -119,7 +119,7 @@ classdef bme280 < handle
   ##
   ## @var{readings} - table structure with fields for Timestamp, Pressure, Temperature and Humidity.
   ## @end deftypefn
-  ## 
+  ##
   ## @deftypefn {} {@var{inf} =} info(@var{obj})
   ## Read the sensor info
   ##
@@ -162,7 +162,7 @@ classdef bme280 < handle
   ## @subsubheading Outputs
   ## None
   ## @end deftypefn
- 
+
   properties(Access = private, constant = true)
     BME280_REG_DIG_T1 = 0x88;
     BME280_REG_DIG_T2 = 0x8A;
@@ -189,7 +189,7 @@ classdef bme280 < handle
     BME280_REG_VERSION = 0xD1;
     BME280_REG_SOFTRESET = 0xE0;
 
-    BME280_REG_CAL26 = 0xE1; 
+    BME280_REG_CAL26 = 0xE1;
 
     BME280_REG_CONTROLHUMID = 0xF2;
     BME280_REG_STATUS = 0XF3;
@@ -200,9 +200,9 @@ classdef bme280 < handle
     BME280_REG_HUMIDDATA = 0xF;
 
     BME280_REG_DATA = 0xF7;
- 
+
   endproperties
-  
+
   properties(Access = private)
     i2c;
     caldata = {};
@@ -240,7 +240,7 @@ classdef bme280 < handle
 
       this.i2c = device(parentObj, "i2caddress", p.Results.I2CAddress, 'Bus', bus);
 
-      # init 
+      # init
       id = this.readRegisterU8(this.BME280_REG_CHIPID);
       if id < hex2dec("56") || id > hex2dec("60")
         error ("Invalid id '%X' read for sensor", id)
@@ -272,7 +272,7 @@ classdef bme280 < handle
       this.caldata.H1 = this.readRegisterU8(this.BME280_REG_DIG_H1);
       this.caldata.H2 = this.readRegisterU16(this.BME280_REG_DIG_H2);
       this.caldata.H3 = this.readRegisterU8(this.BME280_REG_DIG_H3);
-      
+
       a = this.readRegisterU8(this.BME280_REG_DIG_H4);
       b = this.readRegisterU8(this.BME280_REG_DIG_H4+1);
       this.caldata.H4 = uint16(a)*16 + bitand(uint16(b), uint16(0x0f));
@@ -287,7 +287,7 @@ classdef bme280 < handle
       this.writeRegister(this.BME280_REG_CONTROL, uint8([0]));
 
       # start sensors
-      
+
       # sample rate 1
       this.writeRegister(this.BME280_REG_CONTROLHUMID, uint8([0x01]));
 
@@ -350,7 +350,7 @@ classdef bme280 < handle
 
       value = bitshift(int32(data(4)), 12) + bitshift(int32(data(5)), 4) + bitshift(int32(data(6)), -4);
       C = calcTemperature(this, value);
-      
+
       value = bitshift(int32(data(7)), 8) + int32(data(8));
       H = calcHumidity(this, value);
 

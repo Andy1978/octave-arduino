@@ -1,21 +1,21 @@
 ## Copyright (C) 2018-2020 John Donoghue <john.donoghue@ieee.org>
-## 
+##
 ## This program is free software: you can redistribute it and/or modify it
 ## under the terms of the GNU General Public License as published by
 ## the Free Software Foundation, either version 3 of the License, or
 ## (at your option) any later version.
-## 
+##
 ## This program is distributed in the hope that it will be useful, but
 ## WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
-## 
+##
 ## You should have received a copy of the GNU General Public License
 ## along with this program.  If not, see
 ## <https://www.gnu.org/licenses/>.
 
 classdef LCD < arduinoio.LibraryBase
-  ## -*- texinfo -*- 
+  ## -*- texinfo -*-
   ## @deftypefn {} {} arduinoioaddons.LCDAddon.LCD
   ## Basic Example octave addon for LCD
   ##
@@ -110,7 +110,7 @@ classdef LCD < arduinoio.LibraryBase
     CLEAR_COMMAND = hex2dec('02');
     PRINT_COMMAND = hex2dec('03');
     SETCURSOR_COMMAND = hex2dec('04');
-  endproperties   
+  endproperties
   properties(Access = protected, Constant = true)
     LibraryName = 'ExampleLCD/LCD';
     DependentLibraries = {};
@@ -198,7 +198,7 @@ classdef LCD < arduinoio.LibraryBase
     endfunction
 
     function gotoLCD(obj, col, row)
-      if nargin < 3 
+      if nargin < 3
         error ("LCD: col and row");
       endif
       if nargin != 3

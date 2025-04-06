@@ -1,20 +1,20 @@
 ## Copyright (C) 2018-2019 John Donoghue <john.donoghue@ieee.org>
-## 
+##
 ## This program is free software: you can redistribute it and/or modify it
 ## under the terms of the GNU General Public License as published by
 ## the Free Software Foundation, either version 3 of the License, or
 ## (at your option) any later version.
-## 
+##
 ## This program is distributed in the hope that it will be useful, but
 ## WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
-## 
+##
 ## You should have received a copy of the GNU General Public License
 ## along with this program.  If not, see
 ## <https://www.gnu.org/licenses/>.
 
-## -*- texinfo -*- 
+## -*- texinfo -*-
 ## @deftypefn {} {@var{retval} =} scanI2Cbus (@var{ar})
 ## @deftypefnx {} {@var{retval} =} scanI2Cbus (@var{ar}, @var{bus})
 ## Scan arduino for devices on the I2C bus.
@@ -24,7 +24,7 @@
 ##
 ## @var{bus} - bus number to scan I2C devices, when multiple buses are available.
 ## If the bus is not specified, it will default to 0.
-## 
+##
 ## @subsubheading Outputs
 ## @var{retval} - cell array of addresses as strings in format of "0xXX".
 ##
@@ -63,7 +63,7 @@ function addr = scanI2Cbus (ar, bus)
   if (!isa (ar, "arduino"))
     error ("scanI2Cbus: expects arduino object as 1st argument");
   endif
-  
+
   # TODO: configure SPI pins if not already done??
 
   # scan each address, and add any found to cell array

@@ -35,13 +35,13 @@ function res = c_strcmp(s1, s2)
   l1 = length(s1);
   l2 = length(s2);
   l = min(l1, l2);
-  
+
   if l == 0
     res = l1 - l2;
   else
     idx = find(s1(1:l) != s2(1:l), 1);
     if isempty(idx)
-       res = l1 - l2; 
+       res = l1 - l2;
     else
        res = s1(idx) - s2(idx);
     endif

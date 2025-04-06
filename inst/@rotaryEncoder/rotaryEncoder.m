@@ -1,21 +1,21 @@
 ## Copyright (C) 2018-2020 John Donoghue <john.donoghue@ieee.org>
-## 
+##
 ## This program is free software: you can redistribute it and/or modify it
 ## under the terms of the GNU General Public License as published by
 ## the Free Software Foundation, either version 3 of the License, or
 ## (at your option) any later version.
-## 
+##
 ## This program is distributed in the hope that it will be useful, but
 ## WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
-## 
+##
 ## You should have received a copy of the GNU General Public License
 ## along with this program.  If not, see
 ## <https://www.gnu.org/licenses/>.
 
 classdef rotaryEncoder < handle
-  ## -*- texinfo -*- 
+  ## -*- texinfo -*-
   ## @deftypefn {} {@var{obj} =} rotaryEncoder (@var{ar}, @var{chanApin}, @var{chanBpin})
   ## @deftypefnx {} {@var{obj} =} rotaryEncoder (@var{ar}, @var{chanApin}, @var{chanBpin}, @var{ppr})
   ## Create a rotaryEncoder object controlled by the input pins.

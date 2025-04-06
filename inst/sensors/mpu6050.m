@@ -4,18 +4,18 @@
 ## under the terms of the GNU General Public License as published by
 ## the Free Software Foundation, either version 3 of the License, or
 ## (at your option) any later version.
-## 
+##
 ## This program is distributed in the hope that it will be useful, but
 ## WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
-## 
+##
 ## You should have received a copy of the GNU General Public License
 ## along with this program.  If not, see
 ## <https://www.gnu.org/licenses/>.
 
 classdef mpu6050 < handle
-  ## -*- texinfo -*- 
+  ## -*- texinfo -*-
   ## @deftypefn {} {} mpu6050
   ## MPU-6050 6 degrees sensor
   ## @end deftypefn
@@ -95,7 +95,7 @@ classdef mpu6050 < handle
   ##
   ## @var{timestamp} - timestamp when read
   ## @end deftypefn
-  ## 
+  ##
   ## @deftypefn {} {[@var{readings}, @var{overrun}] =} read(@var{obj})
   ## @deftypefnx {} {[@var{accel}, @var{gyro}, @var{mag}, @var{timestamp}, @var{overrun}] =} read(@var{obj})
   ## Read the sensor data
@@ -114,7 +114,7 @@ classdef mpu6050 < handle
   ##
   ## @var{readings} - table structure with fields for Timestamp, Acceleration, AngularVelocity.
   ## @end deftypefn
-  ## 
+  ##
   ## @deftypefn {} {@var{inf} =} info(@var{obj})
   ## Read the sensor info
   ##
@@ -153,7 +153,7 @@ classdef mpu6050 < handle
   ## @subsubheading Outputs
   ## None
   ## @end deftypefn
- 
+
   properties(Access = private, constant = true)
 
     MPU6050_REG_XG_OFFS_TC  = 0x00;
@@ -271,7 +271,7 @@ classdef mpu6050 < handle
     MPU6050_REG_FIFO_R_W    = 0x74;
     MPU6050_REG_WHO_AM_I    = 0x75;
   endproperties
-  
+
   properties(Access = private)
     i2c;
     caldata = {};
@@ -307,13 +307,13 @@ classdef mpu6050 < handle
       id = this.readRegisterU8(this.MPU6050_REG_WHO_AM_I)
       pause(.1)
       id = this.readRegisterU8(this.MPU6050_REG_WHO_AM_I)
-      
+
       if id  != 0x68 && id != 0x69
         error ("Invalid id '%X' read for sensor", id)
       endif
 
       # init
-     
+
 
       # set gyro 250deg/s
       this.writeRegister(this.MPU6050_REG_GYRO_CONFIG, 0x00);
@@ -322,7 +322,7 @@ classdef mpu6050 < handle
 
       # set awake, use gyro x pll clock
       this.writeRegister(this.MPU6050_REG_PWR_MGMT_1, 0x01);
-      
+
     endfunction
 
     function inf = info (this)

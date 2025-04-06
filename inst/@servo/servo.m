@@ -1,17 +1,17 @@
 ## Copyright (C) 2018-2020 John Donoghue <john.donoghue@ieee.org>
-## 
+##
 ## This program is free software: you can redistribute it and/or modify it
 ## under the terms of the GNU General Public License as published by
 ## the Free Software Foundation, either version 3 of the License, or
 ## (at your option) any later version.
-## 
+##
 ## This program is distributed in the hope that it will be useful, but
 ## WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
 
 classdef servo < handle
-  ## -*- texinfo -*- 
+  ## -*- texinfo -*-
   ## @deftypefn {} {@var{obj} = } servo (@var{arduinoobj}, @var{pin})
   ## @deftypefnx {} {@var{obj} = } servo (@var{arduinoobj}, @var{pin}, @var{propertyname}, @var{propertyvalue})
   ## Create a servo object using a specified pin on a arduino board.
@@ -72,32 +72,32 @@ classdef servo < handle
 
     function this = servo(varargin)
       persistent ARDUINO_SERVO_CONFIG = 1;
-  
+
       if nargin < 2
         error("expects arduino object and servo pin");
       endif
-  
+
       ar = varargin{1};
       pin = varargin{2};
-  
+
       this.arduinoobj = [];
       this.minpulseduration = 5.44e-04;
       this.maxpulseduration = 2.40e-03;
       this.pins = {};
-  
+
       if mod (nargin, 2) != 0
         error ("servo: expected property name, value pairs");
       endif
       if !iscellstr (varargin(3:2:nargin))
         error ("servo: expected property names to be strings");
       endif
-  
+
       for i = 3:2:nargin
         propname = tolower (varargin{i});
         propvalue = varargin{i+1};
-    
+
         #printf("%s = %s\n", propname, propvalue);
-        if strcmp(propname,  "minpulseduration") 
+        if strcmp(propname,  "minpulseduration")
           if !isnumeric (propvalue)
             error ("servo: minpulseduration should be a number");
           endif
@@ -108,28 +108,28 @@ classdef servo < handle
           endif
           this.maxpulseduration = propvalue;
         endif
-      
+
       endfor
-    
+
       if (!isa (ar, "arduino"))
         error ("servo: expects arduino object");
       endif
 
       pininfo = getPinInfo (ar, pin);
-    
+
       this.arduinoobj = ar;
-    
+
       validatePin (ar, pin, 'pwm');
-    
+
       configurePin (ar, pin, "pwm");
-    
+
       this.pins{end+1} = pininfo;
-    
+
       sendCommand (ar, "servo", ARDUINO_SERVO_CONFIG, [pininfo.terminal]);
 
       # set clean up function
       # this.cleanup = onCleanup (@() cleanupServo (ar, pininfo));
-    
+
     endfunction
   endmethods
 endclassdef
@@ -138,13 +138,13 @@ endclassdef
 %! ar = arduino();
 
 %!test
-%! assert(configurePin(ar, "d9"), "unset") 
+%! assert(configurePin(ar, "d9"), "unset")
 %! s = servo(ar, "d9");
 %! assert(!isempty(s));
 %! assert(isa(s, "servo"));
-%! assert(configurePin(ar, "d9"), "pwm") 
+%! assert(configurePin(ar, "d9"), "pwm")
 %! delete(s)
-%! assert(configurePin(ar, "d9"), "unset") 
+%! assert(configurePin(ar, "d9"), "unset")
 
 %!error <expects arduino object and servo pin> servo();
 

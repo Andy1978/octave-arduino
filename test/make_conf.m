@@ -1,15 +1,15 @@
 ## Copyright (C) 2018 John Donoghue <john.donoghue@ieee.org>
-## 
+##
 ## This program is free software: you can redistribute it and/or modify it
 ## under the terms of the GNU General Public License as published by
 ## the Free Software Foundation, either version 3 of the License, or
 ## (at your option) any later version.
-## 
+##
 ## This program is distributed in the hope that it will be useful, but
 ## WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
-## 
+##
 ## You should have received a copy of the GNU General Public License
 ## along with this program.  If not, see
 ## <https://www.gnu.org/licenses/>.
@@ -42,7 +42,7 @@ function retval = make_conf (header_file)
         elseif strcmpi(toks{1}, "NUM_ANALOG_INPUTS")
 	  cnt = strrep(toks{2}, "u", "");
           num_analog_pins = str2num(cnt);
-        else 
+        else
           idx = index(toks{1}, "PIN_");
           if idx > 0
             name = tolower(strtrim(toks{1}(idx+4:end)));
@@ -52,7 +52,7 @@ function retval = make_conf (header_file)
 
 	    if !isempty(id)
 
-              # we have pin already ? 
+              # we have pin already ?
               idx = find (cellfun(@(x) (x.id == id), pins), 1);
               if isempty(idx)
                 p = [];
@@ -74,7 +74,7 @@ function retval = make_conf (header_file)
               else
                 pins{idx}.modes{end+1} = name;
               endif
-            endif  
+            endif
           elseif strcmp(toks{1}, "LED_BUILTIN")
             id = str2num(toks{2});
 	    if !isempty(id)
@@ -89,14 +89,14 @@ function retval = make_conf (header_file)
                 pins{end+1} = p;
                 idx = numel(pins);
               endif
-            
+
               pins{idx}.modes{end+1} = "led";
             endif
-          endif  
+          endif
         endif
       endif
     endif
-    
+
     [t, m] = regexp(l, '#define\s+digitalPinHasPWM\((\w+)\)\s+(.*)$', 'tokens', 'match');
     if ! isempty(t)
       toks = t(1){1};
@@ -107,7 +107,7 @@ function retval = make_conf (header_file)
 	 ispwm = {};
       endif
     endif
- 
+
     [t, m] = regexp(l, '#define\s+analogInputToDigitalPin\((\w+)\)\s+(.*)$', 'tokens', 'match');
     if ! isempty(t)
       toks = t(1){1};

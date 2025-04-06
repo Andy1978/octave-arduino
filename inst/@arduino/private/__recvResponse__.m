@@ -1,28 +1,28 @@
 ## Copyright (C) 2021-2022 John Donoghue <john.donoghue@ieee.org>
-## 
+##
 ## This program is free software: you can redistribute it and/or modify it
 ## under the terms of the GNU General Public License as published by
 ## the Free Software Foundation, either version 3 of the License, or
 ## (at your option) any later version.
-## 
+##
 ## This program is distributed in the hope that it will be useful, but
 ## WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details. see
 ## <https://www.gnu.org/licenses/>.
 
-## -*- texinfo -*- 
+## -*- texinfo -*-
 ## @deftypefn {} {@var{retval} =} __recvResponse__ (@var{obj}, @var{lib}, @var{cmd}, @var{timeout})
 ## Private function
 ## @end deftypefn
 
 function [dataOut, errcode] = __recvResponse__ (dev, libid, cmd, timeout, debug)
-   
+
    dataOut = [];
    errcode = 0;
-   
+
    set(dev, "timeout", timeout);
-   
+
 # TODO: current serial doesnt have a way to know if any data is awaiting
 # so try read what we need first without waiting ?
 
@@ -42,7 +42,7 @@ function [dataOut, errcode] = __recvResponse__ (dev, libid, cmd, timeout, debug)
      if (debug)
        printf("* wait for response\n");
      endif
- 
+
      set(dev, "timeout", -1);
 
      [tmpdataOut, tmpdataSize] = fread (dev, 4);
@@ -85,8 +85,8 @@ function [dataOut, errcode] = __recvResponse__ (dev, libid, cmd, timeout, debug)
            s = char(dataOut);
            printf("DEBUG: %s\n", s);
 	 endif
-        
-	[dataOut, errcode] = __recvResponse__ (dev, libid, cmd, timeout, debug); 
+
+	[dataOut, errcode] = __recvResponse__ (dev, libid, cmd, timeout, debug);
      else
 	 errcode = 0;
 	 # all is good

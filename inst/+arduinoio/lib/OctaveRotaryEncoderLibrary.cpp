@@ -6,12 +6,12 @@
  * under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
@@ -67,12 +67,12 @@ RotaryEncoder::init (uint8_t p1, uint8_t p2)
 
   pins[0] = p1;
   pins[1] = p2;
-  
-  pinMode (pins[0], INPUT); 
+
+  pinMode (pins[0], INPUT);
   digitalWrite (pins[0], HIGH);
   pinMode (pins[1], INPUT);
   digitalWrite (pins[1], HIGH);
-    
+
   return 0;
 }
 
@@ -122,7 +122,7 @@ RotaryEncoder::process (unsigned long t)
     speed = s;
   else if(speed > 0)
     speed --;
-  
+
   oldcnt = cnt;
 }
 
@@ -134,9 +134,9 @@ getRotaryEncoder (uint8_t id)
   uint8_t i;
   RotaryEncoder * unused = 0;
 
-  for (i=0;i<MAX_ROTARYENCODERS;i++) 
+  for (i=0;i<MAX_ROTARYENCODERS;i++)
     {
-      if (encoders[i].flags) 
+      if (encoders[i].flags)
         {
           if (encoders[i].pins[0] == id)
             return &encoders[i];
@@ -151,7 +151,7 @@ getRotaryEncoder (uint8_t id)
 
 #endif
 
-OctaveRotaryEncoderLibrary::OctaveRotaryEncoderLibrary (OctaveArduinoClass &oc) 
+OctaveRotaryEncoderLibrary::OctaveRotaryEncoderLibrary (OctaveArduinoClass &oc)
 {
   libName = "RotaryEncoder";
 
@@ -161,7 +161,7 @@ OctaveRotaryEncoderLibrary::OctaveRotaryEncoderLibrary (OctaveArduinoClass &oc)
 void
 OctaveRotaryEncoderLibrary::commandHandler (uint8_t cmdID, uint8_t* data, uint8_t datasz)
 {
-  switch (cmdID) 
+  switch (cmdID)
     {
 #ifdef USE_ROTARYENCODER
     case ARDUINO_CONFIG_ENCODER:
@@ -170,13 +170,13 @@ OctaveRotaryEncoderLibrary::commandHandler (uint8_t cmdID, uint8_t* data, uint8_
         // 1 - enable/alloc
         // 2 = pinb
         RotaryEncoder * reg = getRotaryEncoder (data[0]);
-        if (reg) 
+        if (reg)
           {
             // alloc
             if (data[1] == 1 && datasz == 3)
               {
                 reg->init(data[0], data[2]);
-        
+
                 sendResponseMsg (cmdID, data, 2);
               }
             // free
@@ -191,7 +191,7 @@ OctaveRotaryEncoderLibrary::commandHandler (uint8_t cmdID, uint8_t* data, uint8_
                 sendErrorMsg_P (ERRORMSG_INVALID_ARGS);
               }
           }
-        else 
+        else
           {
             sendErrorMsg_P (ERRORMSG_INVALID_ARGS);
           }
@@ -206,7 +206,7 @@ OctaveRotaryEncoderLibrary::commandHandler (uint8_t cmdID, uint8_t* data, uint8_
             data[1] = reg->resetCount (data[1], data[2]);
             sendResponseMsg (cmdID,data, 2);
           }
-        else 
+        else
           {
             sendErrorMsg_P (ERRORMSG_INVALID_ARGS);
           }
@@ -217,7 +217,7 @@ OctaveRotaryEncoderLibrary::commandHandler (uint8_t cmdID, uint8_t* data, uint8_
         // 0 = id
         // 1 = reset flag
         RotaryEncoder * reg = getRotaryEncoder (data[0]);
-        if(reg && reg->flags && datasz == 2) 
+        if(reg && reg->flags && datasz == 2)
           {
             uint16_t v = reg->readCount ();
 
@@ -238,18 +238,18 @@ OctaveRotaryEncoderLibrary::commandHandler (uint8_t cmdID, uint8_t* data, uint8_
 
             sendResponseMsg (cmdID, data, datasz);
           }
-        else 
+        else
           {
             sendErrorMsg_P (ERRORMSG_INVALID_ARGS);
           }
- 
+
         break;
       }
     case ARDUINO_READSPEED_ENCODER:
       {
         // 0 = id
         RotaryEncoder * reg = getRotaryEncoder (data[0]);
-        if(reg && reg->flags && datasz == 1) 
+        if(reg && reg->flags && datasz == 1)
           {
             uint16_t v = reg->readSpeed ();
 
@@ -259,7 +259,7 @@ OctaveRotaryEncoderLibrary::commandHandler (uint8_t cmdID, uint8_t* data, uint8_
 
             sendResponseMsg (cmdID, data, datasz);
           }
-        else 
+        else
           {
             sendErrorMsg_P (ERRORMSG_INVALID_ARGS);
           }
@@ -294,7 +294,7 @@ OctaveRotaryEncoderLibrary::loop ()
   if (speedtime < newtime)
     {
       unsigned long diff = (newtime - speedtime);
-    
+
       if (diff > 50)
         {
           speedtime = newtime;
@@ -303,7 +303,7 @@ OctaveRotaryEncoderLibrary::loop ()
             {
               RotaryEncoder *enc = &encoders[i];
               if (enc->flags)
-                enc->process(diff); 
+                enc->process(diff);
 	    }
         }
     }

@@ -1,17 +1,17 @@
 ## Copyright (C) 2018-2020 John Donoghue <john.donoghue@ieee.org>
-## 
+##
 ## This program is free software: you can redistribute it and/or modify it
 ## under the terms of the GNU General Public License as published by
 ## the Free Software Foundation, either version 3 of the License, or
 ## (at your option) any later version.
-## 
+##
 ## This program is distributed in the hope that it will be useful, but
 ## WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
 
 classdef spidev < handle
-  ## -*- texinfo -*- 
+  ## -*- texinfo -*-
   ## @deftypefn {} {@var{dev} =} spidev (@var{ar}, @var{cspin})
   ## @deftypefnx {} {@var{dev} =} spidev (@var{ar}, @var{cspin}, @var{propname}, @var{propvalue})
   ##
@@ -81,14 +81,14 @@ classdef spidev < handle
         warning ("Octave:deprecated-function",
                  "spidev is obsolete and will be removed from a future version of arduino, please use 'device' instead");
       endif
- 
+
       if nargin < 2
         error ("spidev: expects arduino object and chipselect pin");
       endif
- 
+
       ar = varargin{1};
       cspin = varargin{2};
- 
+
       if mod(nargin, 2) != 0
         error ("spidev: expected property name, value pairs");
       endif
@@ -101,7 +101,7 @@ classdef spidev < handle
       for i = 3:2:nargin
         propname = tolower(varargin{i});
         propvalue = varargin{i+1};
-    
+
         % printf("%s = %s\n", propname, propvalue);
         if strcmp (propname, "bitrate")
           if !isnumeric (propvalue)
@@ -128,17 +128,17 @@ classdef spidev < handle
       if (!isa (ar, "arduino"))
         error("expects arduino object");
       endif
-  
+
       this.chipselectpin = cspin;
       this.parent = ar;
       this.resourceowner = "spi";
-  
+
       # check if is valid CS pin that can use as output
       validatePin(ar, cspin, 'digital')
       if strcmp(getResourceOwner(ar, cspin), this.resourceowner)
         error ("pin %s is already in use by SPI", cspin)
       endif
-  
+
       if isfirst
         terms = getSPITerminals(ar);
         tmp_pins = ar.get_pingroup(terms{1}, "SPI");
@@ -175,7 +175,7 @@ classdef spidev < handle
 
       this.pins = tmp_pins;
       this.id = cspin.terminal;
-  
+
       try
         for i=1:numel(tmp_pins)
           if isfirst
@@ -257,7 +257,7 @@ endclassdef
 %!test
 %! ar = arduino();
 %! spi = spidev(ar, "d10");
-%! fail ('spidev(ar, "d10");', 'pin d10 is already in use') 
+%! fail ('spidev(ar, "d10");', 'pin d10 is already in use')
 %! spi2 = spidev(ar, "d5");
 %! delete(spi);
 %! delete(spi2);

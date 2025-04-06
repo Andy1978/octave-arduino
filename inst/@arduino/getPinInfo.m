@@ -1,16 +1,16 @@
 ## Copyright (C) 2018 John Donoghue <john.donoghue@ieee.org>
-## 
+##
 ## This program is free software: you can redistribute it and/or modify it
 ## under the terms of the GNU General Public License as published by
 ## the Free Software Foundation, either version 3 of the License, or
 ## (at your option) any later version.
-## 
+##
 ## This program is distributed in the hope that it will be useful, but
 ## WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
 
-## -*- texinfo -*- 
+## -*- texinfo -*-
 ## @deftypefn {} {@var{pininfo} =} getPinInfo (@var{ar}, @var{pin})
 ## @deftypefnx {} {@var{pininfoarray} =} getPinInfo (@var{ar}, @var{pinarray})
 ## Get the pin information from the input pins values.
@@ -18,7 +18,7 @@
 ## getPinInfo (@var{ar}, @var{pin}) will get information for a single pin.
 ##
 ## getPinInfo (@var{ar}, @var{pinarray}) will get a cell array of pin information
-## 
+##
 ## @subsubheading Inputs
 ## @var{ar} - the connected arduino object.
 ##
@@ -70,7 +70,7 @@ function retval = getPinInfo (obj, pins)
     inf.terminal = p.id;
     inf.owner = p.owner;
     inf.mode = p.mode;
- 
+
     retval = inf;
   elseif isvector (pins) && numel (pins) == 1
     p = obj.get_pin(pins);
@@ -79,7 +79,7 @@ function retval = getPinInfo (obj, pins)
     inf.terminal = p.id;
     inf.owner = p.owner;
     inf.mode = p.mode;
- 
+
     retval = inf;
   elseif isvector (pins)
     retval = {};
@@ -90,7 +90,7 @@ function retval = getPinInfo (obj, pins)
       inf.terminal = p.id;
       inf.owner = p.owner;
       inf.mode = p.mode;
- 
+
       retval{end+1} = inf;
     endfor
   elseif isnumeric (pins)

@@ -1,19 +1,19 @@
 ## Copyright (C) 2019 John Donoghue <john.donoghue@ieee.org>
-## 
+##
 ## This program is free software: you can redistribute it and/or modify it
 ## under the terms of the GNU General Public License as published by
 ## the Free Software Foundation, either version 3 of the License, or
 ## (at your option) any later version.
-## 
+##
 ## This program is distributed in the hope that it will be useful, but
 ## WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
 
-## -*- texinfo -*- 
+## -*- texinfo -*-
 ## @deftypefn {} {@var{data} =} readRegister (@var{dev}, @var{reg}, @var{numbytes})
 ## @deftypefnx {} {@var{data} =} readRegister (@var{dev}, @var{reg}, @var{numbytes}, @var{precision})
-## Read a specified number of bytes from a register of an i2cdev object 
+## Read a specified number of bytes from a register of an i2cdev object
 ## using optional precision for bytesize.
 ##
 ## @subsubheading Inputs
@@ -69,14 +69,14 @@ function out = readRegister(dev, reg, numbytes, precision)
   if (strcmp (precision,'uint16'))
     reg = uint16(reg);
     if (endian != getEndian(dev.parent))
-      reg = swapbytes (reg); 
+      reg = swapbytes (reg);
     endif
     reg = typecast (reg, 'uint8');
     regsz = 2;
   elseif (strcmp (precision,'int16'))
     reg = int16(reg);
     if (endian != getEndian(dev.parent))
-      reg = swabytes (reg); 
+      reg = swabytes (reg);
     endif
     reg = typecast (reg, 'uint8');
     regsz = 2;
@@ -98,7 +98,7 @@ function out = readRegister(dev, reg, numbytes, precision)
     sz = sz/2;
     out = typecast (out, precision);
     if (endian != getEndian(dev.parent))
-      out = swapbytes (out); 
+      out = swapbytes (out);
     endif
   else
     if (strcmp (precision, 'int8'))

@@ -1,20 +1,20 @@
 ## Copyright (C) 2018 John Donoghue <john.donoghue@ieee.org>
-## 
+##
 ## This program is free software: you can redistribute it and/or modify it
 ## under the terms of the GNU General Public License as published by
 ## the Free Software Foundation, either version 3 of the License, or
 ## (at your option) any later version.
-## 
+##
 ## This program is distributed in the hope that it will be useful, but
 ## WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
-## 
+##
 ## You should have received a copy of the GNU General Public License
 ## along with this program.  If not, see
 ## <https://www.gnu.org/licenses/>.
 
-## -*- texinfo -*- 
+## -*- texinfo -*-
 ## @deftypefn {} {@var{retval} =} read (@var{register})
 ## @deftypefnx {} {@var{retval} =} read (@var{register}, @var{precision})
 ## read a value from the shift register.
@@ -22,7 +22,7 @@
 ## @subsubheading Inputs
 ## @var{register} - shift register created from shiftRegister call.
 ##
-## @var{precision} - optional precision of the data, where precision can be a 
+## @var{precision} - optional precision of the data, where precision can be a
 ## number in a multiple of 8 (ie: 8,16,32) or can be a named integer type:     8
 ## of 'uint8', 'uint16', 'uint32'.  The default  precision is 8.
 ##
@@ -69,6 +69,6 @@ function out = read(register, precision)
   [tmp, sz] = sendCommand(register.parent, "shiftregister", ARDUINO_SHIFTREG_READ, [register.id precision]);
   out = typecast(uint8(tmp(2:end)), ['uint' num2str(precision)]);
   if (endian == 'L')
-      out = swapbytes (out); 
+      out = swapbytes (out);
   endif
 endfunction

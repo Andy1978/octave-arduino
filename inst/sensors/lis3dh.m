@@ -4,18 +4,18 @@
 ## under the terms of the GNU General Public License as published by
 ## the Free Software Foundation, either version 3 of the License, or
 ## (at your option) any later version.
-## 
+##
 ## This program is distributed in the hope that it will be useful, but
 ## WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
-## 
+##
 ## You should have received a copy of the GNU General Public License
 ## along with this program.  If not, see
 ## <https://www.gnu.org/licenses/>.
 
 classdef lis3dh < handle
-  ## -*- texinfo -*- 
+  ## -*- texinfo -*-
   ## @deftypefn {} {} lis3dh
   ## LIS3DH 3 degrees sensor
   ## @end deftypefn
@@ -77,7 +77,7 @@ classdef lis3dh < handle
   ##
   ## @var{readings} - table structure with fields for Timestamp, Acceleration.
   ## @end deftypefn
-  ## 
+  ##
   ## @deftypefn {} {@var{inf} =} info(@var{obj})
   ## Read the sensor info
   ##
@@ -118,7 +118,7 @@ classdef lis3dh < handle
   ## @subsubheading Outputs
   ## None
   ## @end deftypefn
- 
+
   properties(Access = private, constant = true)
 
     # Reserved (do not modify) 00 - 06 Reserved
@@ -168,7 +168,7 @@ classdef lis3dh < handle
     LIS3DH_REG_ACT_DUR = 0x3F;
 
   endproperties
-  
+
   properties(Access = private)
     i2c;
   endproperties
@@ -218,7 +218,7 @@ classdef lis3dh < handle
 
       # bdu enabled, little endian, scale 2g, hires
       this.writeRegister(this.LIS3DH_REG_CTRL_REG4, 0x88);
- 
+
     endfunction
 
     function inf = info (this)

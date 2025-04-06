@@ -1,21 +1,21 @@
 ## Copyright (C) 2018-2020 John Donoghue <john.donoghue@ieee.org>
-## 
+##
 ## This program is free software: you can redistribute it and/or modify it
 ## under the terms of the GNU General Public License as published by
 ## the Free Software Foundation, either version 3 of the License, or
 ## (at your option) any later version.
-## 
+##
 ## This program is distributed in the hope that it will be useful, but
 ## WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
-## 
+##
 ## You should have received a copy of the GNU General Public License
 ## along with this program.  If not, see
 ## <https://www.gnu.org/licenses/>.
 
 classdef dcmotorv2 < arduinoio.AddonBase
-  ## -*- texinfo -*- 
+  ## -*- texinfo -*-
   ## @deftypefn {} {} arduinoioaddons.adafruit.dcmotorv2
   ## DC Motor class for dc motor control on the adafruit motor shield
   ##
@@ -40,7 +40,7 @@ classdef dcmotorv2 < arduinoio.AddonBase
   ##
   ## @var{mnum} - The motor number (1 - 4)
   ##
-  ## @var{propertyname, propertyvalue} - Optional property name/value 
+  ## @var{propertyname, propertyvalue} - Optional property name/value
   ## pairs to pass to motor object.
   ##
   ## Current known properties are:
@@ -91,7 +91,7 @@ classdef dcmotorv2 < arduinoio.AddonBase
     FREE_COMMAND = hex2dec('21');
     START_COMMAND = hex2dec('22');
     STOP_COMMAND = hex2dec('23');
-  endproperties   
+  endproperties
 
   properties(Access = private)
     cleanup;
@@ -108,18 +108,18 @@ classdef dcmotorv2 < arduinoio.AddonBase
 
   methods
     function this = dcmotorv2(shield, mnum, varargin)
-      
+
       validate_shield = @(x) isa(x, "arduinoioaddons.adafruit.motorshieldv2");
       validate_mtrnum = @(x) (isnumeric(x) && isscalar(x) && (x >= 1 && x <= 4));
       validate_speed = @(x) (isnumeric(x) && (x <= 1 && x >= -1));
 
       p = inputParser(CaseSensitive=false, FunctionName='adafruit/dcmotorv2');
-      
+
       p.addRequired('shield',validate_shield);
       p.addRequired('mnum',validate_mtrnum);
-      
+
       p.addParameter('Speed', 0, validate_speed);
-      
+
       p.parse(shield, mnum, varargin{:});
 
       this.Parent = p.Results.shield;
@@ -166,6 +166,6 @@ classdef dcmotorv2 < arduinoio.AddonBase
     endfunction
 
   endmethods
- 
+
 endclassdef
 

@@ -6,12 +6,12 @@
  * under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
@@ -54,7 +54,7 @@ static HardwareSerial * serial[] = {
 #define NUM_SERIAL_PORTS (sizeof(serial)/sizeof(HardwareSerial*))
 #endif
 
-OctaveSerialLibrary::OctaveSerialLibrary (OctaveArduinoClass &oc) 
+OctaveSerialLibrary::OctaveSerialLibrary (OctaveArduinoClass &oc)
 {
   libName = "Serial";
 
@@ -62,7 +62,7 @@ OctaveSerialLibrary::OctaveSerialLibrary (OctaveArduinoClass &oc)
 }
 
 void
-OctaveSerialLibrary::setup () 
+OctaveSerialLibrary::setup ()
 {
 #ifdef USE_SERIAL
   serial[0] = &SERIAL_PORT_HARDWARE_OPEN;
@@ -94,7 +94,7 @@ OctaveSerialLibrary::commandHandler (uint8_t cmdID, uint8_t* data, uint8_t datas
 	      sendInvalidNumArgsMsg ();
             }
           else if (data[0] < 1 || data[0] > NUM_SERIAL_PORTS)
-            { 
+            {
               sendErrorMsg_P (ERRORMSG_INVALID_DEVICE);
             }
           else
@@ -118,7 +118,7 @@ OctaveSerialLibrary::commandHandler (uint8_t cmdID, uint8_t* data, uint8_t datas
               sendInvalidNumArgsMsg ();
             }
           else if (data[0] < 1 || data[0] > NUM_SERIAL_PORTS)
-            { 
+            {
               sendErrorMsg_P (ERRORMSG_INVALID_DEVICE);
             }
           else
@@ -165,7 +165,7 @@ OctaveSerialLibrary::commandHandler (uint8_t cmdID, uint8_t* data, uint8_t datas
               sendInvalidNumArgsMsg ();
             }
           else if (data[0] < 1 || data[0] > NUM_SERIAL_PORTS)
-            { 
+            {
               sendErrorMsg_P (ERRORMSG_INVALID_DEVICE);
             }
           else
@@ -179,7 +179,7 @@ OctaveSerialLibrary::commandHandler (uint8_t cmdID, uint8_t* data, uint8_t datas
       case ARDUINO_CONFIGSERIAL:
         {
           if (datasz > 0 && (data[0] < 1 || data[0] > NUM_SERIAL_PORTS))
-            { 
+            {
               sendErrorMsg_P(ERRORMSG_INVALID_DEVICE);
             }
           // enable

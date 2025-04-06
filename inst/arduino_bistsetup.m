@@ -1,20 +1,20 @@
 ## Copyright (C) 2019-2020 John Donoghue <john.donoghue@ieee.org>
-## 
+##
 ## This program is free software: you can redistribute it and/or modify it
 ## under the terms of the GNU General Public License as published by
 ## the Free Software Foundation, either version 3 of the License, or
 ## (at your option) any later version.
-## 
+##
 ## This program is distributed in the hope that it will be useful, but
 ## WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
-## 
+##
 ## You should have received a copy of the GNU General Public License
 ## along with this program.  If not, see
 ## <https://www.gnu.org/licenses/>.
 
-## -*- texinfo -*- 
+## -*- texinfo -*-
 ## @deftypefn {} {@var{retval} =} arduino_bistsetup ()
 ## @deftypefnx {} {@var{retval} =} arduino_bistsetup (@var{propertyname}, @var{propertyvalue})
 ## Install on an arduino the required core libraries to run the BIST tests
@@ -23,7 +23,7 @@
 ## the arduino board.
 ##
 ## @subsubheading Inputs
-## 
+##
 ## @var{propertyname}, @var{propertyvalue} - A sequence of property name/value pairs can be given
 ## to set defaults while programming.
 ##
@@ -51,7 +51,7 @@ function retval = arduino_bistsetup (varargin)
   if !iscellstr (varargin(1:2:nargin))
     error ("arduinosetup: expected property names to be strings");
   endif
-  
+
   arduinobinary = {};
   debug = false;
   for i = 1:2:nargin
@@ -67,7 +67,7 @@ function retval = arduino_bistsetup (varargin)
     endif
   endfor
 
-  printf ("** Installing core libraries on arduino - please press upload in the IDE, and after completion, close the IDE\n"); 
+  printf ("** Installing core libraries on arduino - please press upload in the IDE, and after completion, close the IDE\n");
   fflush(stdout);
   libs = { "I2C", "servo", "SPI", "ShiftRegister", "RotaryEncoder", "Ultrasonic" };
   if ! arduinosetup ('libraries', libs, varargin{:})
@@ -75,19 +75,19 @@ function retval = arduino_bistsetup (varargin)
   endif
 
   unwind_protect
-    printf ("** Checking for any arduinos\n"); 
+    printf ("** Checking for any arduinos\n");
     fflush(stdout);
     ars = scanForArduinos();
     printf ("Found %d\n", numel(ars));
 
-    printf ("** Checking can open an UNO arduino\n"); 
+    printf ("** Checking can open an UNO arduino\n");
     fflush(stdout);
     ar = arduino ([], "uno", 'debug', debug);
     if ! isarduino(ar)
       error ('Couldnt load find an arduino UNO board')
     endif
 
-    printf ("** Checking arduino version\n"); 
+    printf ("** Checking arduino version\n");
     fflush(stdout);
     p = pkg('list', 'arduino');
     if isempty(p)
@@ -107,5 +107,5 @@ function retval = arduino_bistsetup (varargin)
   unwind_protect_cleanup
     clear ar;
   end_unwind_protect
-  
+
 endfunction

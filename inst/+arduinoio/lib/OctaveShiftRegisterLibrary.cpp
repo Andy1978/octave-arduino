@@ -6,12 +6,12 @@
  * under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
@@ -92,14 +92,14 @@ ShiftRegister::init ()
   // depends on type of what need do
   if (type == TYPE_74HC164)
     {
-      pinMode (pins[SER_74HC164_DATA], OUTPUT); 
+      pinMode (pins[SER_74HC164_DATA], OUTPUT);
       pinMode (pins[SER_74HC164_CLK], OUTPUT);
-    
+
       // have reset pin
-      if (used  > SER_74HC164_RESET) 
-        {  
-          pinMode (pins[SER_74HC164_RESET], OUTPUT); 
-          digitalWrite (pins[SER_74HC164_RESET], LOW); 
+      if (used  > SER_74HC164_RESET)
+        {
+          pinMode (pins[SER_74HC164_RESET], OUTPUT);
+          digitalWrite (pins[SER_74HC164_RESET], LOW);
         }
 
       digitalWrite (pins[SER_74HC595_CLK], LOW);
@@ -108,10 +108,10 @@ ShiftRegister::init ()
         {
           // have reset pin - so unset clr
           digitalWrite (pins[SER_74HC164_RESET], HIGH);
-        } 
+        }
     }
-  
-  if (type == TYPE_74HC165) 
+
+  if (type == TYPE_74HC165)
     {
       // serial data is input
       pinMode (pins[SER_74HC165_DATA], INPUT);
@@ -123,17 +123,17 @@ ShiftRegister::init ()
       digitalWrite (pins[SER_74HC165_LOAD], HIGH);
     }
 
-  if (type == TYPE_74HC595) 
+  if (type == TYPE_74HC595)
     {
-      pinMode (pins[SER_74HC595_DATA], OUTPUT); 
+      pinMode (pins[SER_74HC595_DATA], OUTPUT);
       pinMode (pins[SER_74HC595_CLK], OUTPUT); // clk
       pinMode (pins[SER_74HC595_LATCH], OUTPUT); // latch
-    
+
       // have reset pin
-      if (used  > SER_74HC595_RESET) 
-        {  
+      if (used  > SER_74HC595_RESET)
+        {
           pinMode (pins[SER_74HC595_RESET], OUTPUT); // reset (optional)
-          digitalWrite (pins[SER_74HC595_RESET], LOW); 
+          digitalWrite (pins[SER_74HC595_RESET], LOW);
         }
       // clock start high
       digitalWrite (pins[SER_74HC595_CLK], LOW);
@@ -141,10 +141,10 @@ ShiftRegister::init ()
       digitalWrite (pins[SER_74HC595_LATCH], LOW);
 
       // have reset pin - so unset clr
-      if (used > SER_74HC595_RESET) 
-        { 
+      if (used > SER_74HC595_RESET)
+        {
           digitalWrite (pins[SER_74HC595_RESET], HIGH);
-        } 
+        }
     }
 
   return 0;
@@ -153,14 +153,14 @@ ShiftRegister::init ()
 uint8_t
 ShiftRegister::csenable (bool en)
 {
-  if (type == TYPE_74HC164) 
+  if (type == TYPE_74HC164)
     {
       // nothing to do
-    } 
-  else if (type == TYPE_74HC165) 
+    }
+  else if (type == TYPE_74HC165)
     {
       // enable the clock with clockenalepin
-      digitalWrite (pins[SER_74HC165_CLOCKEN], en ? LOW : HIGH); 
+      digitalWrite (pins[SER_74HC165_CLOCKEN], en ? LOW : HIGH);
     }
   else if (type == TYPE_74HC595)
     {
@@ -173,11 +173,11 @@ ShiftRegister::csenable (bool en)
 uint8_t
 ShiftRegister::latch ()
 {
-  if (type == TYPE_74HC164) 
+  if (type == TYPE_74HC164)
     {
       // no latch
     }
-  else if (type == TYPE_74HC165) 
+  else if (type == TYPE_74HC165)
     {
       // trigger loading, by toggle on loadpin
       digitalWrite (pins[SER_74HC165_LOAD], LOW);
@@ -186,7 +186,7 @@ ShiftRegister::latch ()
       digitalWrite (pins[SER_74HC165_LOAD], HIGH);
       delayMicroseconds (5);
   }
-  else if (type == TYPE_74HC595) 
+  else if (type == TYPE_74HC595)
     {
       // latches on rising edge
       digitalWrite (pins[SER_74HC595_LATCH], HIGH);
@@ -204,7 +204,7 @@ ShiftRegister::read ()
 {
   uint8_t val = 0;
 
-  if (type == TYPE_74HC165) 
+  if (type == TYPE_74HC165)
     {
       val = shiftIn(pins[SER_74HC165_DATA], pins[SER_74HC165_CLK], MSBFIRST);
     }
@@ -215,12 +215,12 @@ ShiftRegister::read ()
 uint8_t
 ShiftRegister::write (uint8_t d)
 {
-  if (type == TYPE_74HC595) 
+  if (type == TYPE_74HC595)
     {
       shiftOut (pins[SER_74HC595_DATA], pins[SER_74HC595_CLK], MSBFIRST, d);
       return 1;
     }
-  if (type == TYPE_74HC164) 
+  if (type == TYPE_74HC164)
     {
       shiftOut (pins[SER_74HC164_DATA], pins[SER_74HC164_CLK], MSBFIRST, d);
       return 1;
@@ -235,18 +235,18 @@ ShiftRegister::reset ()
   if (type == TYPE_74HC595)
     {
       // have reset pin - so unset clr
-      if (used > SER_74HC595_RESET) 
-      { 
+      if (used > SER_74HC595_RESET)
+      {
         digitalWrite (pins[SER_74HC595_RESET], LOW);
         delayMicroseconds (5);
 
         digitalWrite (pins[SER_74HC595_RESET], HIGH);
         delayMicroseconds (5);
- 
+
         return 1;
-      } 
+      }
     }
-  else if (type == TYPE_74HC164) 
+  else if (type == TYPE_74HC164)
     {
       if (used > SER_74HC164_RESET)
       {
@@ -255,9 +255,9 @@ ShiftRegister::reset ()
 
         digitalWrite (pins[SER_74HC164_RESET], HIGH);
         delayMicroseconds (5);
- 
+
         return 1;
-      } 
+      }
     }
 
   return 0;
@@ -271,9 +271,9 @@ getShiftRegister (uint8_t id)
   uint8_t i;
   ShiftRegister * unused = 0;
 
-  for (i=0; i<MAX_SHIFT_REGISTERS; i++) 
+  for (i=0; i<MAX_SHIFT_REGISTERS; i++)
     {
-      if (shiftregs[i].used > 0) 
+      if (shiftregs[i].used > 0)
       {
         if (shiftregs[i].pins[0] == id)
           return &shiftregs[i];
@@ -288,7 +288,7 @@ getShiftRegister (uint8_t id)
 
 #endif
 
-OctaveShiftRegisterLibrary::OctaveShiftRegisterLibrary(OctaveArduinoClass &oc) 
+OctaveShiftRegisterLibrary::OctaveShiftRegisterLibrary(OctaveArduinoClass &oc)
 {
   libName = "ShiftRegister";
 
@@ -298,7 +298,7 @@ OctaveShiftRegisterLibrary::OctaveShiftRegisterLibrary(OctaveArduinoClass &oc)
 void
 OctaveShiftRegisterLibrary::commandHandler (uint8_t cmdID, uint8_t* data, uint8_t datasz)
 {
-  switch (cmdID) 
+  switch (cmdID)
     {
 #ifdef USE_SHIFTREG
       case ARDUINO_CONFIG_SHIFTREG:
@@ -309,7 +309,7 @@ OctaveShiftRegisterLibrary::commandHandler (uint8_t cmdID, uint8_t* data, uint8_
           // 3 = pins []
           // 4 ... ]
           ShiftRegister * reg = getShiftRegister (data[0]);
-          if (reg) 
+          if (reg)
             {
               // alloc
               if (data[1] == 1 && datasz >= 4)
@@ -324,18 +324,18 @@ OctaveShiftRegisterLibrary::commandHandler (uint8_t cmdID, uint8_t* data, uint8_
 
                   // pins used  = pins defined
                   reg->used = datasz - 2;
-            
+
                   // 1st pin is the register id
                   reg->pins[0] = data[0];
                   reg->type = data[2];
 
                   byte c = 0;
-                  for  (c=0; c<reg->used-1; c++) 
+                  for  (c=0; c<reg->used-1; c++)
                     {
                       reg->pins[c+1] = data[3+c];
                     }
                   reg->init ();
-        
+
 	          sendResponseMsg (cmdID, data, 2);
                 }
               // free
@@ -351,7 +351,7 @@ OctaveShiftRegisterLibrary::commandHandler (uint8_t cmdID, uint8_t* data, uint8_
                   sendErrorMsg_P (ERRORMSG_INVALID_ARGS);
                 }
             }
-          else 
+          else
             {
               sendErrorMsg_P (ERRORMSG_INVALID_ARGS);
             }
@@ -366,7 +366,7 @@ OctaveShiftRegisterLibrary::commandHandler (uint8_t cmdID, uint8_t* data, uint8_
               data[1] = reg->reset ();
               sendResponseMsg (cmdID, data, 2);
             }
-          else 
+          else
             {
               sendErrorMsg_P (ERRORMSG_INVALID_ARGS);
             }
@@ -397,13 +397,13 @@ OctaveShiftRegisterLibrary::commandHandler (uint8_t cmdID, uint8_t* data, uint8_
 
                   sendResponseMsg (cmdID, data, datasz);
                 }
-              else 
-                { 
+              else
+                {
                   // chip cant do write
                  sendErrorMsg_P (ERRORMSG_CANT_WRITE);
                 }
             }
-          else 
+          else
             {
               sendErrorMsg_P (ERRORMSG_INVALID_ARGS);
             }
@@ -414,9 +414,9 @@ OctaveShiftRegisterLibrary::commandHandler (uint8_t cmdID, uint8_t* data, uint8_
           // 0 = id
           // 1 = numbytes
           ShiftRegister * reg = getShiftRegister (data[0]);
-          if (reg && reg->used > 0 && datasz == 2) 
+          if (reg && reg->used > 0 && datasz == 2)
             {
-              if (reg->canread ()) 
+              if (reg->canread ())
                 {
                   reg->csenable (true);
                   reg->latch ();
@@ -427,7 +427,7 @@ OctaveShiftRegisterLibrary::commandHandler (uint8_t cmdID, uint8_t* data, uint8_
                       data[c] = reg->read ();
                     }
                   reg->csenable (false);
-        
+
 	          sendResponseMsg (cmdID, data, datasz);
                 }
               else
@@ -436,11 +436,11 @@ OctaveShiftRegisterLibrary::commandHandler (uint8_t cmdID, uint8_t* data, uint8_
                   sendErrorMsg_P( ERRORMSG_CANT_READ);
                 }
             }
-          else 
+          else
             {
               sendErrorMsg_P (ERRORMSG_INVALID_ARGS);
             }
- 
+
           break;
         }
 #endif

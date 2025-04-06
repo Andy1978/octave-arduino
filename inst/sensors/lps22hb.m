@@ -2,23 +2,23 @@
 ##
 ## Conversion routines based on code from LPS22HB datasheet
 ## DocID027083 Rev 6
-## 
+##
 ## This program is free software: you can redistribute it and/or modify it
 ## under the terms of the GNU General Public License as published by
 ## the Free Software Foundation, either version 3 of the License, or
 ## (at your option) any later version.
-## 
+##
 ## This program is distributed in the hope that it will be useful, but
 ## WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
-## 
+##
 ## You should have received a copy of the GNU General Public License
 ## along with this program.  If not, see
 ## <https://www.gnu.org/licenses/>.
 
 classdef lps22hb < handle
-  ## -*- texinfo -*- 
+  ## -*- texinfo -*-
   ## @deftypefn {} {} lps22hb
   ## LPS22HB absolute pressure and temperature sensor
   ## @end deftypefn
@@ -86,7 +86,7 @@ classdef lps22hb < handle
   ##
   ## @var{timestamp} - timestamp when read
   ## @end deftypefn
-  ## 
+  ##
   ## @deftypefn {} {[@var{readings}, @var{overrun}] =} read(@var{obj})
   ## @deftypefnx {} {[@var{P}, @var{C}, @var{timestamp}, @var{overrun}] =} read(@var{obj})
   ## Read the sensor data
@@ -105,7 +105,7 @@ classdef lps22hb < handle
   ##
   ## @var{readings} - table structure with fields for Timestamp, Pressure, Temperature and Humidity.
   ## @end deftypefn
-  ## 
+  ##
   ## @deftypefn {} {@var{inf} =} info(@var{obj})
   ## Read the sensor info
   ##
@@ -148,7 +148,7 @@ classdef lps22hb < handle
   ## @subsubheading Outputs
   ## None
   ## @end deftypefn
- 
+
   properties(Access = private, constant = true)
     LPS22_DEFAULT_ADDRESS  = 0x5D;
     LPS22_CHIP_ID = 0xB1;
@@ -181,7 +181,7 @@ classdef lps22hb < handle
     #LPS22_REG_Reserved = 0x2D;    # Reserved
     LPS22_REG_LPFP_RES = 0x33;     # Filter reset register
   endproperties
-  
+
   properties(Access = private)
     i2c;
     caldata = {};
@@ -240,7 +240,7 @@ classdef lps22hb < handle
 
       pause(.1);
 
-      # init 
+      # init
       id = this.readRegisterU8(this.LPS22_REG_WHO_AM_I);
       if id != this.LPS22_CHIP_ID
         pause(.2);
@@ -301,7 +301,7 @@ classdef lps22hb < handle
 
       value = bitshift(uint16(data(6)), 8) + uint16(data(5));
       C = calcTemperature(this, value);
-      
+
       value = bitshift(int32(data(4)), 16) + bitshift(int32(data(3)), 8) + int32(data(2));
       P = calcPressure(this, value);
 

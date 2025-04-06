@@ -1,17 +1,17 @@
 ## Copyright (C) 2019-2020 John Donoghue <john.donoghue@ieee.org>
-## 
+##
 ## This program is free software: you can redistribute it and/or modify it
 ## under the terms of the GNU General Public License as published by
 ## the Free Software Foundation, either version 3 of the License, or
 ## (at your option) any later version.
-## 
+##
 ## This program is distributed in the hope that it will be useful, but
 ## WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
 
 classdef ultrasonic < handle
-  ## -*- texinfo -*- 
+  ## -*- texinfo -*-
   ## @deftypefn {} {@var{dev} =} ultrasonic (@var{ar}, @var{triggerpin})
   ## @deftypefnx {} {@var{dev} =} ultrasonic (@var{ar}, @var{triggerpin}, @var{echopin})
   ## @deftypefnx {} {@var{dev} =} ultrasonic (@var{ar}, @var{triggerpin}, @var{echopin}, @var{propname}, @var{propvalue})
@@ -64,18 +64,18 @@ classdef ultrasonic < handle
   methods (Access = public)
     function this = ultrasonic (varargin)
       ARDUINO_ULTRASONIC_CONFIG = 1;
-  
+
       if nargin < 2
         error ("expects arduino object and triggerpin pin");
       endif
-  
+
       ar = varargin{1};
       triggerpin = varargin{2};
       echopin = [];
       if nargin > 2
         echopin = varargin{3};
       endif
-  
+
       if nargin > 3 && mod(nargin-3, 2) != 0
         error ("arduino: expected property name, value pairs");
       endif
@@ -86,11 +86,11 @@ classdef ultrasonic < handle
       this.id = [];
       this.pins = {};
       this.outputformat = "double";
-  
+
       for i = 4:2:nargin
         propname = tolower(varargin{i});
         propvalue = varargin{i+1};
-    
+
         % printf("%s = %s\n", propname, propvalue);
         if strcmp (propname, "outputformat")
           if !ischar(propvalue)
@@ -99,16 +99,16 @@ classdef ultrasonic < handle
           this.outputformat = tolower(propvalue);
           # NOTE:currently outputformat is ignored
         endif
-        
+
       endfor
-      
+
       if (!isa (ar, "arduino"))
         error("expects arduino object");
       endif
-  
+
       this.parent = ar;
       this.resourceowner = "ultrasonic";
-  
+
       tmp_pins = {};
 
       validatePin(ar, triggerpin, 'digital')
@@ -118,10 +118,10 @@ classdef ultrasonic < handle
         validatePin(ar, echopin, 'digital')
         tmp_pins{end+1} = getPinInfo(ar, echopin);
       endif
-  
+
       this.pins = tmp_pins;
       this.id = tmp_pins{1}.terminal;
-  
+
       try
 
         configurePin(ar, tmp_pins{1}.name, "digitaloutput")
@@ -131,13 +131,13 @@ classdef ultrasonic < handle
           configurePin(ar, tmp_pins{2}.name, "digitaloutput")
           configurePinResource (ar, tmp_pins{2}.name, this.resourceowner, "digitalinput", true);
         endif
-          
+
         if numel(tmp_pins) > 1
           [tmp, sz] = sendCommand(this.parent, this.resourceowner, ARDUINO_ULTRASONIC_CONFIG, [this.id 1 tmp_pins{2}.terminal]);
         else
           [tmp, sz] = sendCommand(this.parent, this.resourceowner, ARDUINO_ULTRASONIC_CONFIG, [this.id 1]);
         endif
-    
+
       catch
         for i=1:numel(tmp_pins)
           configurePinResource(ar, tmp_pins{i}.name, tmp_pins{i}.owner, tmp_pins{i}.mode, true)
@@ -149,7 +149,7 @@ classdef ultrasonic < handle
       #
       # set clean up function
       # this.cleanup = onCleanup (@() cleanupUltrasonic (ar, this.resourceowner, tmp_pins));
-          
+
     endfunction
   endmethods
 endclassdef
@@ -174,6 +174,6 @@ endclassdef
 
 %!test
 %! ar = arduino();
-%! fail ('ultrasonic();', 'expects arduino object and triggerpin pin') 
-%! fail ('ultrasonic(ar);', 'expects arduino object and triggerpin pin') 
-%! fail ('ultrasonic(ar, "hello");', 'arduino: unknown pin hello') 
+%! fail ('ultrasonic();', 'expects arduino object and triggerpin pin')
+%! fail ('ultrasonic(ar);', 'expects arduino object and triggerpin pin')
+%! fail ('ultrasonic(ar, "hello");', 'arduino: unknown pin hello')

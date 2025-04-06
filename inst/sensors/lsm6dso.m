@@ -4,18 +4,18 @@
 ## under the terms of the GNU General Public License as published by
 ## the Free Software Foundation, either version 3 of the License, or
 ## (at your option) any later version.
-## 
+##
 ## This program is distributed in the hope that it will be useful, but
 ## WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
-## 
+##
 ## You should have received a copy of the GNU General Public License
 ## along with this program.  If not, see
 ## <https://www.gnu.org/licenses/>.
 
 classdef lsm6dso < handle
-  ## -*- texinfo -*- 
+  ## -*- texinfo -*-
   ## @deftypefn {} {} lsm6dso
   ## LSM6DSO 6 degrees sensor
   ## @end deftypefn
@@ -95,7 +95,7 @@ classdef lsm6dso < handle
   ##
   ## @var{timestamp} - timestamp when read
   ## @end deftypefn
-  ## 
+  ##
   ## @deftypefn {} {[@var{readings}, @var{overrun}] =} read(@var{obj})
   ## @deftypefnx {} {[@var{accel}, @var{gyro}, @var{mag}, @var{timestamp}, @var{overrun}] =} read(@var{obj})
   ## Read the sensor data
@@ -114,7 +114,7 @@ classdef lsm6dso < handle
   ##
   ## @var{readings} - table structure with fields for Timestamp, Acceleration, AngularVelocity.
   ## @end deftypefn
-  ## 
+  ##
   ## @deftypefn {} {@var{inf} =} info(@var{obj})
   ## Read the sensor info
   ##
@@ -153,7 +153,7 @@ classdef lsm6dso < handle
   ## @subsubheading Outputs
   ## None
   ## @end deftypefn
- 
+
   properties(Access = private, constant = true)
 
     LSM6DSO_REG_FUNC_CFG_ACCESS = 0x01; # RW 01 00000001 00000000
@@ -243,7 +243,7 @@ classdef lsm6dso < handle
     LSM6DSO_REG_FIFO_DATA_OUT_Z_H = 0x7E; # R 7E 01111110 output
 
   endproperties
-  
+
   properties(Access = private)
     i2c;
     caldata = {};
@@ -279,7 +279,7 @@ classdef lsm6dso < handle
 
       pause(.1);
       id = this.readRegisterU8(this.LSM6DSO_REG_WHO_AM_I);
-      
+
       if id  != 0x6C
         error ("Invalid id '%X' read for sensor", id)
       endif
@@ -297,7 +297,7 @@ classdef lsm6dso < handle
 
       # Set the ODR config register to ODR/4
       this.writeRegister(this.LSM6DSO_REG_CTRL8_XL, 0x09);
-      
+
     endfunction
 
     function inf = info (this)

@@ -1,29 +1,29 @@
 ## Copyright (C) 2018-2022 John Donoghue <john.donoghue@ieee.org>
-## 
+##
 ## This program is free software: you can redistribute it and/or modify it
 ## under the terms of the GNU General Public License as published by
 ## the Free Software Foundation, either version 3 of the License, or
 ## (at your option) any later version.
-## 
+##
 ## This program is distributed in the hope that it will be useful, but
 ## WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details. see
 ## <https://www.gnu.org/licenses/>.
 
-## -*- texinfo -*- 
+## -*- texinfo -*-
 ## @deftypefn {} {@var{retval} =} __initArduino__ (@var{obj}, @var{port}, @var{board}, @var{scan_only})
 ## Private function
 ## @end deftypefn
 
 function retval = __initArduino__ (obj, port, board, scan_only)
- 
+
    % send command and get back reponse
    ARDUINO_INIT = 1;
    ARDUINO_GETLIB  = 8;
-   
+
    ok = false;
-   
+
    if !isempty(port) || !ischar(port)
      # port maybe ip address ?
      if !isempty(regexp(port, "^[0-9]+.[0-9]+.[0-9]+.[0-9]+$"))
@@ -43,11 +43,11 @@ function retval = __initArduino__ (obj, port, board, scan_only)
          printf("flushing %d bytes of data\n", length(data));
        endif
      endwhile
-     
+
      [dataout, status] = __sendCommand__(obj, 0, ARDUINO_INIT);
      if status != 0
        error ("__initArduino__: failed valid response err=%d - %s", status, char(dataout));
-     endif 
+     endif
      % uno r3 - atmega32 1E 95 0F
      sig = (uint32(dataout(1))*256*256) + (uint32(dataout(2))*256) + uint32(dataout(3));
      % work out mcu
@@ -117,13 +117,13 @@ function retval = __initArduino__ (obj, port, board, scan_only)
            lib.id = libid;
 	   lib.name = lower(char(dataout(2:end)));
 	   obj.config.libs{end+1} = lib;
-         endif 
+         endif
        endfor
      endif
    else
      error ("__initArduino__: expected a valid port");
    endif
-   
+
    retval = obj;
-   
+
 endfunction

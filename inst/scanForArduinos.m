@@ -1,20 +1,20 @@
 ## Copyright (C) 2018-2025 John Donoghue <john.donoghue@ieee.org>
-## 
+##
 ## This program is free software: you can redistribute it and/or modify it
 ## under the terms of the GNU General Public License as published by
 ## the Free Software Foundation, either version 3 of the License, or
 ## (at your option) any later version.
-## 
+##
 ## This program is distributed in the hope that it will be useful, but
 ## WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
-## 
+##
 ## You should have received a copy of the GNU General Public License
 ## along with this program.  If not, see
 ## <https://www.gnu.org/licenses/>.
 
-## -*- texinfo -*- 
+## -*- texinfo -*-
 ## @deftypefn {} {@var{retval} =} scanForArduinos ()
 ## @deftypefnx {} {@var{retval} =} scanForArduinos (@var{maxCount})
 ## @deftypefnx {} {@var{retval} =} scanForArduinos (@var{"debug"})
@@ -22,19 +22,19 @@
 ## @deftypefnx {} {@var{retval} =} scanForArduinos (@var{propertyname}, @var{propertvalue} ...)
 ## Scan system for programmed serial connected arduino boards.
 ##
-## scanForArduinos will scan the system for programmed arduino boards 
-## and return at most @var{maxCount} of them as a cell array 
+## scanForArduinos will scan the system for programmed arduino boards
+## and return at most @var{maxCount} of them as a cell array
 ## in @var{retval}.
 ##
 ## @subsubheading Inputs
 ## @var{maxCount} - max number of arduino boards to detect.
-## if @var{maxCount} is not specified, or is a less than 1, the 
+## if @var{maxCount} is not specified, or is a less than 1, the
 ## function will return as many arduino boards as it can detect.
 ##
-## @var{type} - optional board type to match. If specified, the board 
+## @var{type} - optional board type to match. If specified, the board
 ## type must match for the arduino to be added to the return list.
 ##
-## @var{"debug"} - if single input parameter is "debug", the 
+## @var{"debug"} - if single input parameter is "debug", the
 ## scanForArduinos will display debug information as it scans
 ## all available ports for arduinos.
 ##
@@ -55,7 +55,7 @@
 ##
 ## Each cell value of the cell array will contain a structure with values of:
 ## @table @asis
-## @item port 
+## @item port
 ## the serial port the arduino is connected to
 ## @item board
 ## the board type of the arduino
@@ -79,7 +79,7 @@ function arduinos = scanForArduinos (varargin)
     typestr = "";
     if ischar(varargin{1})
       if strcmp(varargin{1}, "debug")
-        debug_flag = 1; 
+        debug_flag = 1;
       else
         error ("scanForArduinos: invalid argument");
       endif
@@ -100,7 +100,7 @@ function arduinos = scanForArduinos (varargin)
     if !iscellstr (varargin (1:2:nargin))
       error ("scanForArduinos: expected property names to be strings");
     endif
- 
+
     for i = 1:2:nargin
       propname = tolower (varargin{i});
       propvalue = varargin{i+1};
@@ -162,7 +162,7 @@ function arduinos = scanForArduinos (varargin)
         portname = ports{i};
 
         if debug_flag
-          printf("* trying comport %s\n", portname);	
+          printf("* trying comport %s\n", portname);
         endif
         s = arduino(portname, "", "Debug", debug_flag, "BaudRate", baudrate, "_scan_only", 1);
 
@@ -171,7 +171,7 @@ function arduinos = scanForArduinos (varargin)
           info.port = portname;
           info.board = s.board;
           arduinos{end+1} = info;
-          
+
           if debug_flag
             printf(" ** found board %s\n", info.board);
           endif
@@ -180,7 +180,7 @@ function arduinos = scanForArduinos (varargin)
             break;
           endif
         endif
-	
+
       unwind_protect_cleanup
         if !isempty (s)
           delete(s);
@@ -204,6 +204,6 @@ endfunction
 %! assert(!isempty(arduinos{1}.board))
 
 %!test
-%! a = scanForArduinos("BaudRate", 115200, "BoardType", "Uno"); 
+%! a = scanForArduinos("BaudRate", 115200, "BoardType", "Uno");
 
 %!error <scanForArduinos: unknown board type> scanForArduinos(1, "madeuparduinoname");

@@ -1,24 +1,24 @@
 ## Copyright (C) 2018-2020 John Donoghue <john.donoghue@ieee.org>
-## 
+##
 ## This program is free software: you can redistribute it and/or modify it
 ## under the terms of the GNU General Public License as published by
 ## the Free Software Foundation, either version 3 of the License, or
 ## (at your option) any later version.
-## 
+##
 ## This program is distributed in the hope that it will be useful, but
 ## WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
-## 
+##
 ## You should have received a copy of the GNU General Public License
 ## along with this program.  If not, see
 ## <https://www.gnu.org/licenses/>.
 
 classdef Echo < arduinoio.LibraryBase
-  ## -*- texinfo -*- 
+  ## -*- texinfo -*-
   ## @deftypefn {} {} arduinoioaddons.ExampleAddon.Echo
   ## Basic Example matlab/octave code to illustrate creating
-  ## a user addon. 
+  ## a user addon.
   ##
   ## @seealso{addon}
   ## @end deftypefn
@@ -45,14 +45,14 @@ classdef Echo < arduinoio.LibraryBase
   ## @var{text} - text to send to arduino
   ##
   ## @subsubheading Outputs
-  ## @var{response} - response from the arduino, which should be the same as 
+  ## @var{response} - response from the arduino, which should be the same as
   ## the input text.
   ## @end deftypefn
-  
+
   # commands
   properties(Access = private, Constant = true)
       ECHO_COMMAND = hex2dec('01');
-  endproperties   
+  endproperties
 
   properties(Access = protected, Constant = true)
     LibraryName = 'ExampleAddon/Echo';
@@ -77,6 +77,6 @@ classdef Echo < arduinoio.LibraryBase
       # data is just an echo of what we sent
       out = char(output);
     endfunction
-   
+
   endmethods
 endclassdef

@@ -1,21 +1,21 @@
 ## Copyright (C) 2018-2019 John Donoghue <john.donoghue@ieee.org>
-## 
+##
 ## This program is free software: you can redistribute it and/or modify it
 ## under the terms of the GNU General Public License as published by
 ## the Free Software Foundation, either version 3 of the License, or
 ## (at your option) any later version.
-## 
+##
 ## This program is distributed in the hope that it will be useful, but
 ## WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
-## 
+##
 ## You should have received a copy of the GNU General Public License
 ## along with this program.  If not, see
 ## <https://www.gnu.org/licenses/>.
 
 classdef arduino < handle
-  ## -*- texinfo -*- 
+  ## -*- texinfo -*-
   ## @deftypefn {} {@var{retval} =} arduino ()
   ## @deftypefnx {} {@var{retval} =} arduino (@var{port})
   ## @deftypefnx {} {@var{retval} =} arduino (@var{port}, @var{board})
@@ -23,7 +23,7 @@ classdef arduino < handle
   ## @deftypefnx {} {@var{retval} =} arduino (@var{iaddress})
   ## @deftypefnx {} {@var{retval} =} arduino (@var{ipaddress}, @var{board})
   ## Create a arduino object with a connection to an arduino board.
-  ## 
+  ##
   ## @subsubheading Inputs
   ## @var{port} - full path of serial port to connect to. For Linux,
   ## usually /dev/ttySXXX, for windows COMXX.
@@ -31,7 +31,7 @@ classdef arduino < handle
   ## @var{board} - name of board to connect (default is 'uno').
   ##
   ## @var{propname}, @var{propvalue} - property name and value pair
-  ## for additional properties to pass to the creation of the 
+  ## for additional properties to pass to the creation of the
   ## arduino object.
   ##
   ## Currently properties are ignored, with the exception of:
@@ -77,7 +77,7 @@ classdef arduino < handle
   ## The analog voltage reference
   ## @end table
   ## @seealso{scanForArduinos, arduinosetup}
-  ## @end deftypefn 
+  ## @end deftypefn
 
   properties (Access = private)
     config = {};
@@ -103,9 +103,9 @@ classdef arduino < handle
   properties (SetAccess = private, Hidden = true)
     DeviceAddress = "";
   endproperties
-  
+
   methods (Access = public)
- 
+
     function this = arduino (varargin)
 
       if (nargin == 0)
@@ -132,7 +132,7 @@ classdef arduino < handle
           this.connected = false;
           this = __initArduino__ (this, arg0, "", 0);
         else
-          error ("arduino: port must be a string");         
+          error ("arduino: port must be a string");
         endif
       else
         # at least port, board [optional property pairs]
@@ -148,11 +148,11 @@ classdef arduino < handle
           c = arduinoio.getBoardConfig(arduinos{1}.board);
           this.BaudRate = c.baudrate;
         elseif !ischar (port)
-          error ("arduino: port must be a string");         
+          error ("arduino: port must be a string");
         endif
-        
+
         if !ischar (port)
-          error ("arduino: board must be a string");         
+          error ("arduino: board must be a string");
         endif
 
         if mod (nargin, 2) != 0
@@ -308,10 +308,10 @@ classdef arduino < handle
       if isempty (idx)
         error ("arduino: unknown pin");
       endif
- 
+
       this.config.pins{idx} = info;
     endfunction
-      
+
     function info = get_pin (this, pin)
       if ischar(pin)
         idx = find (cellfun(@(x) strcmpi (x.name, pin), this.config.pins), 1);
@@ -322,7 +322,7 @@ classdef arduino < handle
       if isempty (idx)
         error (["arduino: unknown pin " pin]);
       endif
-     
+
       info = this.config.pins{idx};
     endfunction
 
@@ -334,7 +334,7 @@ classdef arduino < handle
       else
         info = {};
       endif
-     
+
     endfunction
 
     function retval = get_group(this,type)
@@ -361,7 +361,7 @@ classdef arduino < handle
       idx = find (cellfun(@(x) strncmpi(x, type, length(type)), pininfo.modes), 1);
       if !isempty (idx)
         # possibly this will be in format of
-        # type[XX]_YY where XX is a number ir: spi0, spi1 etc, 
+        # type[XX]_YY where XX is a number ir: spi0, spi1 etc,
         ##  _YY will be the pinfunction ie: scl, miso etc
         values = strsplit (pininfo.modes{idx}, "_");
         type = values{1};
@@ -423,9 +423,9 @@ classdef arduino < handle
       else
         this.resources{idx} = res;
       endif
- 
+
     endfunction
-      
+
     function res = get_resource (this, resource)
       resource = tolower(resource);
       idx = find (cellfun(@(x) strcmp(x.name, resource), this.resources), 1);
@@ -440,7 +440,7 @@ classdef arduino < handle
       else
         res = this.resources{idx};
       endif
-     
+
     endfunction
 
     function v = board_voltage (this)
@@ -471,7 +471,7 @@ classdef arduino < handle
       v = this.config.deviceaddress;
     endfunction
 
-  endmethods 
+  endmethods
 endclassdef
 
 %!shared arduinos

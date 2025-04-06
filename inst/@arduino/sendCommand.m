@@ -1,16 +1,16 @@
 ## Copyright (C) 2018-2020 John Donoghue <john.donoghue@ieee.org>
-## 
+##
 ## This program is free software: you can redistribute it and/or modify it
 ## under the terms of the GNU General Public License as published by
 ## the Free Software Foundation, either version 3 of the License, or
 ## (at your option) any later version.
-## 
+##
 ## This program is distributed in the hope that it will be useful, but
 ## WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
 
-## -*- texinfo -*- 
+## -*- texinfo -*-
 ## @deftypefn {} {@var{outdata, outsize} =} sendCommand (@var{ar}, @var{libname}, @var{commandid})
 ## @deftypefnx {} {@var{outdata, outsize} =} sendCommand (@var{ar}, @var{libname}, @var{commandid}, @var{data})
 ## @deftypefnx {} {@var{outdata, outsize} =} sendCommand (@var{ar}, @var{libname}, @var{commandid}, @var{data}, @var{timeout})
@@ -20,7 +20,7 @@
 ## @subsubheading Inputs
 ## @var{ar} - connected arduino object.
 ##
-## @var{libname} - library sending the command. The name should match a programmed 
+## @var{libname} - library sending the command. The name should match a programmed
 ## library of the arduino, or an error will be displayed.
 ##
 ## @var{commandid} - integer value for the command being sent to the arduino.
@@ -67,11 +67,11 @@ function [dataOut,payloadSize] = sendCommand (obj, libname, commandid, data, tim
   endif
 
   [dataOut, status] = __sendCommand__ (obj, libid, commandid, data, timeout);
- 
+
   if status != 0
     error ("sendCommand: failed err=%d: msg=%s", status, char(dataOut));
-  endif 
-  
+  endif
+
   payloadSize = numel(dataOut);
 endfunction
 

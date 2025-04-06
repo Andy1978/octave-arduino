@@ -1,21 +1,21 @@
 ## Copyright (C) 2018-2020 John Donoghue <john.donoghue@ieee.org>
-## 
+##
 ## This program is free software: you can redistribute it and/or modify it
 ## under the terms of the GNU General Public License as published by
 ## the Free Software Foundation, either version 3 of the License, or
 ## (at your option) any later version.
-## 
+##
 ## This program is distributed in the hope that it will be useful, but
 ## WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
-## 
+##
 ## You should have received a copy of the GNU General Public License
 ## along with this program.  If not, see
 ## <https://www.gnu.org/licenses/>.
 
 classdef EEPRom < arduinoio.LibraryBase
-  ## -*- texinfo -*- 
+  ## -*- texinfo -*-
   ## @deftypefn {} {} arduinoioaddons.EEPRomAddon.EEPRom
   ## EEPROM addon for arduino
   ##
@@ -79,7 +79,7 @@ classdef EEPRom < arduinoio.LibraryBase
     ERASE_COMMAND = hex2dec('01');
     READ_COMMAND  = hex2dec('02');
     WRITE_COMMAND = hex2dec('03');
-  endproperties   
+  endproperties
 
   properties(Access = protected, Constant = true)
     LibraryName = 'EEPRomAddon/EEPRom';
@@ -135,7 +135,7 @@ classdef EEPRom < arduinoio.LibraryBase
       if address + num > obj.len
 	error ("EEPRom: address + num (%d) is out of EEPRom bounds of %d\n", (address+num), obj.len);
       endif
- 
+
       intval = uint16(address);
       datain = [ bitshift(intval,-8) bitand(intval, 255) num];
       dataout = sendCommand(obj.Parent, obj.LibraryName, cmdID, datain);
@@ -152,7 +152,7 @@ classdef EEPRom < arduinoio.LibraryBase
       endif
 
       num = numel(value);
-      if num < 0 || num > 128 
+      if num < 0 || num > 128
         error ("EEProm: value size expected to be between  0 and %d", 128);
       endif
       if (address + num > obj.len)

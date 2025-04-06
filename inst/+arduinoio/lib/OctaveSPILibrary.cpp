@@ -6,12 +6,12 @@
  * under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
@@ -74,7 +74,7 @@ SPIDevice::free ()
 
 void SPIDevice::set_cs(uint8_t state)
 {
-  digitalWrite (cspin, state); 
+  digitalWrite (cspin, state);
 }
 
 SPISettings SPIDevice::settings()
@@ -98,9 +98,9 @@ getSPI (uint8_t id)
   uint8_t i;
   SPIDevice * unused = 0;
 
-  for (i=0; i<MAX_SPI_DEVICES; i++) 
+  for (i=0; i<MAX_SPI_DEVICES; i++)
     {
-      if (spidevs[i].flags & USED) 
+      if (spidevs[i].flags & USED)
         {
           if (spidevs[i].cspin == id)
             return &spidevs[i];
@@ -115,7 +115,7 @@ getSPI (uint8_t id)
 
 #endif
 
-OctaveSPILibrary::OctaveSPILibrary (OctaveArduinoClass &oc) 
+OctaveSPILibrary::OctaveSPILibrary (OctaveArduinoClass &oc)
 {
 
   libName = "SPI";
@@ -128,7 +128,7 @@ OctaveSPILibrary::commandHandler (uint8_t cmdID, uint8_t* data, uint8_t datasz)
 {
   switch (cmdID)
     {
-#ifdef USE_SPI        
+#ifdef USE_SPI
       case ARDUINO_CONFIGSPI:
         {
           if (datasz == 4)
@@ -187,7 +187,7 @@ OctaveSPILibrary::commandHandler (uint8_t cmdID, uint8_t* data, uint8_t datasz)
           break;
         }
       case ARDUINO_READ_WRITE_SPI:
-      
+
         if (datasz >= 2)
           {
             SPIDevice * dev = getSPI (data[0]);
@@ -202,14 +202,14 @@ OctaveSPILibrary::commandHandler (uint8_t cmdID, uint8_t* data, uint8_t datasz)
             SPI.beginTransaction (dev->settings());
 
             // set CS low
-            dev->set_cs(LOW); 
+            dev->set_cs(LOW);
             delay (1);
 
             // transfer the bytes
 	    dev->transfer(&data[1], datasz-1);
 
             // set CS hi
-            dev->set_cs(HIGH); 
+            dev->set_cs(HIGH);
             delay (1);
             // endtransaction
             SPI.endTransaction ();
@@ -220,7 +220,7 @@ OctaveSPILibrary::commandHandler (uint8_t cmdID, uint8_t* data, uint8_t datasz)
           {
             sendInvalidNumArgsMsg ();
           }
-        break;  
+        break;
 #endif
 
       default:

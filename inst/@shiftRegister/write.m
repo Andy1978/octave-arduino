@@ -1,20 +1,20 @@
 ## Copyright (C) 2018 John Donoghue <john.donoghue@ieee.org>
-## 
+##
 ## This program is free software: you can redistribute it and/or modify it
 ## under the terms of the GNU General Public License as published by
 ## the Free Software Foundation, either version 3 of the License, or
 ## (at your option) any later version.
-## 
+##
 ## This program is distributed in the hope that it will be useful, but
 ## WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
-## 
+##
 ## You should have received a copy of the GNU General Public License
 ## along with this program.  If not, see
 ## <https://www.gnu.org/licenses/>.
 
-## -*- texinfo -*- 
+## -*- texinfo -*-
 ## @deftypefn {} write (@var{register}, @var{dataIn})
 ## @deftypefnx {} write (@var{register}, @var{dataIn}, @var{precision})
 ## Write a value to the shift register.
@@ -24,8 +24,8 @@
 ##
 ## @var{dataIn} - data to clock into the shiftRegister.
 ##
-## @var{precision} - optional precision of the data, where precision can be a 
-## number in a multiple of 8 (ie: 8,16,32) or can be a named integer type 
+## @var{precision} - optional precision of the data, where precision can be a
+## number in a multiple of 8 (ie: 8,16,32) or can be a named integer type
 ## of 'uint8', 'uint16', 'uint32'.  The default  precision is 8.
 ##
 ## @seealso{shiftRegister, read}
@@ -71,13 +71,13 @@ function write(register, dataIn, precision)
     case 16
       dataIn = uint16(dataIn);
       if (endian == 'L')
-        dataIn = swapbytes (dataIn); 
+        dataIn = swapbytes (dataIn);
       endif
       dataIn = typecast(dataIn, 'uint8');
-    case 32 
+    case 32
       dataIn = uint32(dataIn);
       if (endian == 'L')
-        dataIn = swapbytes (dataIn); 
+        dataIn = swapbytes (dataIn);
       endif
       dataIn = typecast(dataIn, 'uint8');
   endswitch

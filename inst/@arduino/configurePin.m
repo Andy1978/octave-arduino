@@ -1,20 +1,20 @@
 ## Copyright (C) 2018 John Donoghue <john.donoghue@ieee.org>
-## 
+##
 ## This program is free software: you can redistribute it and/or modify it
 ## under the terms of the GNU General Public License as published by
 ## the Free Software Foundation, either version 3 of the License, or
 ## (at your option) any later version.
-## 
+##
 ## This program is distributed in the hope that it will be useful, but
 ## WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
-## 
+##
 ## You should have received a copy of the GNU General Public License
 ## along with this program.  If not, see
 ## <https://www.gnu.org/licenses/>.
 
-## -*- texinfo -*- 
+## -*- texinfo -*-
 ## @deftypefn {} {@var{currmode} =} configurePin (@var{ar}, @var{pin})
 ## @deftypefnx {} {} configurePin (@var{ar}, @var{pin}, @var{mode})
 ## Set/Get pin mode for a specified pin on arduino connection.
@@ -48,7 +48,7 @@
 ## - Specify pin to use a pullup switch
 ## @item PWM
 ## - Specify pin to use a pulse width modulator
-## @item Servo 
+## @item Servo
 ## - Specify pin to use a servo
 ## @item SPI
 ## - Specify a pin to use with SPI protocol
@@ -71,16 +71,16 @@ function retval = configurePin (obj, pin, mode)
 
   persistent ARDUINO_CONFIGPIN = 2;
 
-  if nargin != 2 && nargin != 3 
+  if nargin != 2 && nargin != 3
     error ("@arduino.configurePin: expected pin name and value");
   endif
 
   if !ischar (pin) && !isnumeric (pin)
     error ("@arduino.configurePin: expected pin name as string");
   endif
-  
+
   pininfo = obj.get_pin (pin);
-  
+
   if nargin == 3
     % set mode
 
@@ -89,7 +89,7 @@ function retval = configurePin (obj, pin, mode)
     endif
 
     mode = tolower (mode);
-  
+
     [pinstate, pinmode] = pinStateMode (mode);
 
     if strcmp (pinmode,"spi")
@@ -112,25 +112,25 @@ function retval = configurePin (obj, pin, mode)
 
     # send config command to arduino
     datain = uint8 ([pininfo.id pinstate]);
-  
+
     [dataout, status] = __sendCommand__ (obj, 0, ARDUINO_CONFIGPIN, datain);
-    
+
     if status != 0
       error ("@arduino.configurePin: failed to set pin state err=%d - %s", status, char(dataout));
     endif
   else
     % get mode ?
-    
+
     datain = uint8 ([pininfo.id]);
     [dataout, status] = __sendCommand__ (obj, 0, ARDUINO_CONFIGPIN, datain);
-    
+
     if status != 0
       error ("@arduino.configurePin: failed to set pin state err=%d - %s", status, char(dataout));
     endif
-   
+
     retval = pinStateMode (dataout(2));
   endif
-  
+
 endfunction
 
 %!test

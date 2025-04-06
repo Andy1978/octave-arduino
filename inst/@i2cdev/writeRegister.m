@@ -1,16 +1,16 @@
 ## Copyright (C) 2018 John Donoghue <john.donoghue@ieee.org>
-## 
+##
 ## This program is free software: you can redistribute it and/or modify it
 ## under the terms of the GNU General Public License as published by
 ## the Free Software Foundation, either version 3 of the License, or
 ## (at your option) any later version.
-## 
+##
 ## This program is distributed in the hope that it will be useful, but
 ## WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
 
-## -*- texinfo -*- 
+## -*- texinfo -*-
 ## @deftypefn {} {} writeRegister (@var{dev}, @var{reg}, @var{datain})
 ## @deftypefnx {} {} writeRegister (@var{dev}, @var{dev}, @var{datain}, @var{precision})
 ## Write data to i2cdev object at a given registry position
@@ -21,7 +21,7 @@
 ##
 ## @var{reg} - registry position to write to.
 ##
-## @var{datain} - data to write to device. Datasize should not exceed the constraints 
+## @var{datain} - data to write to device. Datasize should not exceed the constraints
 ## of the data type specified for the precision.
 ##
 ## @var{precision} - Optional precision for the input write data.
@@ -35,7 +35,7 @@ function writeRegister (dev, reg, datain, precision)
   if isempty (endian)
     [~, ~, endian] = computer ();
   endif
- 
+
   persistent ARDUINO_I2C_WRITEREG = 8;
 
   if nargin < 3 || nargin > 4
@@ -45,7 +45,7 @@ function writeRegister (dev, reg, datain, precision)
   if ~isnumeric (reg)
     error("@i2c.writeRegister: expected reg to be a number");
   endif
- 
+
   if nargin == 4
     if  !ischar (precision)
       error ("@i2c.writeRegister: expected precision to be a string");
@@ -63,7 +63,7 @@ function writeRegister (dev, reg, datain, precision)
     reg = uint16 (reg);
     datain = uint16 (datain);
     if (endian == 'L' && strcmp (dev.bitorder,'msbfirst')) || (endian == 'B' && strcmp (dev.bitorder, 'lsbfirst'))
-      reg = swapbytes (reg); 
+      reg = swapbytes (reg);
       datain = swapbytes (datain);
     endif
     reg = typecast (reg, 'uint8');
@@ -72,7 +72,7 @@ function writeRegister (dev, reg, datain, precision)
     reg = uint16 (reg);
     datain = int16 (datain);
     if (endian == 'L' && strcmp (dev.bitorder,'msbfirst')) || (endian == 'B' && strcmp(dev.bitorder, 'lsbfirst'))
-      reg = swabytes (reg); 
+      reg = swabytes (reg);
       datain = swapbytes (datain);
     endif
     reg = typecast (reg, 'uint8');

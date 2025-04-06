@@ -6,12 +6,12 @@
  * under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
@@ -55,8 +55,8 @@ Ultrasonic::init (uint8_t p1, uint8_t p2=0xff)
 
   if(p1 == p2)
     pins[1] = 0xff;
-  
-  pinMode (pins[0], OUTPUT); 
+
+  pinMode (pins[0], OUTPUT);
   digitalWrite (pins[0], LOW);
 
   if (pins[1] != 0xff)
@@ -83,9 +83,9 @@ Ultrasonic::read ()
 
   if (pins[1] == 0xff)
     {
-      pinMode (pins[0], INPUT); 
+      pinMode (pins[0], INPUT);
       duration = pulseIn(pins[0], HIGH, 250);
-      pinMode (pins[0], OUTPUT); 
+      pinMode (pins[0], OUTPUT);
     }
   else
     {
@@ -104,9 +104,9 @@ getUltrasonic (uint8_t id)
   uint8_t i;
   Ultrasonic * unused = 0;
 
-  for (i=0; i<MAX_ULTRASONICS; i++) 
+  for (i=0; i<MAX_ULTRASONICS; i++)
     {
-      if (ultrasonics[i].flags) 
+      if (ultrasonics[i].flags)
         {
           if (ultrasonics[i].pins[0] == id)
             return &ultrasonics[i];
@@ -121,7 +121,7 @@ getUltrasonic (uint8_t id)
 
 #endif
 
-OctaveUltrasonicLibrary::OctaveUltrasonicLibrary (OctaveArduinoClass &oc) 
+OctaveUltrasonicLibrary::OctaveUltrasonicLibrary (OctaveArduinoClass &oc)
 {
   libName = "Ultrasonic";
 
@@ -131,7 +131,7 @@ OctaveUltrasonicLibrary::OctaveUltrasonicLibrary (OctaveArduinoClass &oc)
 void
 OctaveUltrasonicLibrary::commandHandler (uint8_t cmdID, uint8_t* data, uint8_t datasz)
 {
-  switch (cmdID) 
+  switch (cmdID)
     {
 #ifdef USE_ULTRASONIC
       case ARDUINO_CONFIG_ULTRASONIC:
@@ -140,19 +140,19 @@ OctaveUltrasonicLibrary::commandHandler (uint8_t cmdID, uint8_t* data, uint8_t d
           // 1 - enable/alloc
           // 2 = echo pin (optional)
           Ultrasonic * reg = getUltrasonic (data[0]);
-          if (reg) 
+          if (reg)
             {
               // alloc
               if (data[1] == 1 && datasz == 2)
                 {
                   reg->init (data[0]);
-        
+
 	          sendResponseMsg (cmdID,data, 2);
                 }
 	      else if(data[1] == 1 && datasz == 3)
                 {
                   reg->init (data[0], data[2]);
-        
+
 	          sendResponseMsg (cmdID,data, 2);
                 }
               // free
@@ -167,7 +167,7 @@ OctaveUltrasonicLibrary::commandHandler (uint8_t cmdID, uint8_t* data, uint8_t d
                   sendErrorMsg_P (ERRORMSG_INVALID_ARGS);
                 }
             }
-          else 
+          else
             {
               sendErrorMsg_P (ERRORMSG_INVALID_ARGS);
             }
@@ -177,7 +177,7 @@ OctaveUltrasonicLibrary::commandHandler (uint8_t cmdID, uint8_t* data, uint8_t d
         {
           // 0 = id
           Ultrasonic * reg = getUltrasonic (data[0]);
-          if (reg && datasz == 1) 
+          if (reg && datasz == 1)
             {
               uint32_t v = reg->read ();
 
@@ -190,11 +190,11 @@ OctaveUltrasonicLibrary::commandHandler (uint8_t cmdID, uint8_t* data, uint8_t d
 
 	      sendResponseMsg (cmdID, data, datasz);
             }
-          else 
+          else
             {
               sendErrorMsg_P (ERRORMSG_INVALID_ARGS);
             }
- 
+
           break;
         }
 #endif

@@ -1,20 +1,20 @@
 ## Copyright (C) 2023 John Donoghue <john.donoghue@ieee.org>
-## 
+##
 ## This program is free software: you can redistribute it and/or modify it
 ## under the terms of the GNU General Public License as published by
 ## the Free Software Foundation, either version 3 of the License, or
 ## (at your option) any later version.
-## 
+##
 ## This program is distributed in the hope that it will be useful, but
 ## WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
-## 
+##
 ## You should have received a copy of the GNU General Public License
 ## along with this program.  If not, see
 ## <https://www.gnu.org/licenses/>.
 
-## -*- texinfo -*- 
+## -*- texinfo -*-
 ## @deftypefn {} {@var{retval} =} config_nano_esp32 (@var{initdata})
 ## Private function for setting allowed modes of nano esp32 board pins
 ## @end deftypefn
@@ -32,7 +32,7 @@ function retval = config_nano_esp32 (initdata)
 
   # info expected to be provided by config.
   retval.description = 'Arduino Nano ESP32 Board';
-  
+
   # pin config
   retval.pins = {};
   retval.pins{end+1} = arduinoio.config.pin_info("D0", 0, { 'digital' , 'uart_rx'});
@@ -53,7 +53,7 @@ function retval = config_nano_esp32 (initdata)
   retval.pins{end+1} = arduinoio.config.pin_info("D14", 14, { 'digital', 'pwm', 'led_r', 'interrupt' });
   retval.pins{end+1} = arduinoio.config.pin_info("D15", 15, { 'digital', 'pwm', 'led_g', 'interrupt' });
   retval.pins{end+1} = arduinoio.config.pin_info("D16", 16, { 'digital', 'pwm', 'led_b', 'interrupt' });
-  
+
   retval.pins{end+1} = arduinoio.config.pin_info("A0", 17, { 'analog' });
   retval.pins{end+1} = arduinoio.config.pin_info("A1", 18, { 'analog' });
   retval.pins{end+1} = arduinoio.config.pin_info("A2", 19, { 'analog' });

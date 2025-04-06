@@ -1,21 +1,21 @@
 ## Copyright (C) 2018-2020 John Donoghue <john.donoghue@ieee.org>
-## 
+##
 ## This program is free software: you can redistribute it and/or modify it
 ## under the terms of the GNU General Public License as published by
 ## the Free Software Foundation, either version 3 of the License, or
 ## (at your option) any later version.
-## 
+##
 ## This program is distributed in the hope that it will be useful, but
 ## WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
-## 
+##
 ## You should have received a copy of the GNU General Public License
 ## along with this program.  If not, see
 ## <https://www.gnu.org/licenses/>.
 
 classdef shiftRegister < handle
-  ## -*- texinfo -*- 
+  ## -*- texinfo -*-
   ## @deftypefn {} {@var{register} =} shiftRegister (@var{ar}, @var{shifttype}, @var{dataPin}, @var{clockPin} ...)
   ## @deftypefnx {} {@var{register} =} shiftRegister (@var{ar},'74hc164', @var{dataPin}, @var{clockPin}, @var{resetPin})
   ## @deftypefnx {} {@var{register} =} shiftRegister (@var{ar},'74hc165', @var{dataPin}, @var{clockPin}, @var{loadPin}, @var{clockEnablePin})
@@ -190,7 +190,7 @@ endclassdef
 %! # validate pins not allocated
 %! assert(configurePin(ar, "d2"), "unset");
 %! assert(configurePin(ar, "d3"), "unset");
-%! 
+%!
 %! register = shiftRegister(ar, '74hc164', "d2", "d3");
 %! assert (isa (register, "shiftRegister"))
 %!

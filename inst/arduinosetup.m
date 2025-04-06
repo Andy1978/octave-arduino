@@ -1,30 +1,30 @@
 ## Copyright (C) 2018-2019 John Donoghue <john.donoghue@ieee.org>
-## 
+##
 ## This program is free software: you can redistribute it and/or modify it
 ## under the terms of the GNU General Public License as published by
 ## the Free Software Foundation, either version 3 of the License, or
 ## (at your option) any later version.
-## 
+##
 ## This program is distributed in the hope that it will be useful, but
 ## WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
-## 
+##
 ## You should have received a copy of the GNU General Public License
 ## along with this program.  If not, see
 ## <https://www.gnu.org/licenses/>.
 
-## -*- texinfo -*- 
+## -*- texinfo -*-
 ## @deftypefn {} {@var{retval} =} arduinosetup ()
 ## @deftypefnx {} {@var{retval} =} arduinosetup (@var{propertyname}, @var{propertyvalue})
 ## Open the arduino config / programming tool to program the arduino hardware for usage with
 ## the Octave arduino functions.
 ##
-## arduinosetup will create a temporary project  using the arduino IDE and allow 
-## compiling and programming of the code to an arduino. 
+## arduinosetup will create a temporary project  using the arduino IDE and allow
+## compiling and programming of the code to an arduino.
 ##
 ## @subsubheading Inputs
-## 
+##
 ## @var{propertyname}, @var{propertyvalue} - A sequence of property name/value pairs can be given
 ## to set defaults while programming.
 ##
@@ -56,7 +56,7 @@ function retval = arduinosetup (varargin)
   if !iscellstr (varargin(1:2:nargin))
     error ("arduinosetup: expected property names to be strings");
   endif
-  
+
   libs = {};
   arduinobinary = {};
   debug = false;
@@ -143,10 +143,10 @@ function retval = arduinosetup (varargin)
   # make a temp folder and create a arduino project in it
   tmpdir = tempname ();
   mkdir (tmpdir);
-  
+
   unwind_protect
     mkdir (fullfile (tmpdir, "octave"));
-    
+
     # copy all the libfiles
     copyfile (libfiles, fullfile (tmpdir, "octave"));
 
@@ -226,7 +226,7 @@ function retval = arduinosetup (varargin)
     fprintf (fd, "  //uncomment and define if using static IP\n");
     fprintf (fd, "//# define WIFI_STATIC_IP \"192.168.0.10\"\n");
     fprintf (fd, "#endif");
- 
+
     fclose (fd);
 
     # requested additional libs
@@ -238,7 +238,7 @@ function retval = arduinosetup (varargin)
 	 if !isempty (l.cppheaderfile)
            copyfile (l.cppheaderfile, fullfile(tmpdir, "octave"));
 	   [d,f,e] = fileparts (l.cppheaderfile);
-           fprintf (fd, '#include "%s%s"\n', f,e);   
+           fprintf (fd, '#include "%s%s"\n', f,e);
 	   if !isempty (l.cppclassname)
 	     fprintf (fd, "%s addon%d(octavearduino);\n", l.cppclassname, i);
            endif
@@ -249,7 +249,7 @@ function retval = arduinosetup (varargin)
        endif
     endfor
     fclose(fd);
-    
+
     # start the arduino ide
     if isempty (arduinobinary)
       arduinobinary = __arduino_binary__ ();
@@ -267,5 +267,5 @@ function retval = arduinosetup (varargin)
     confirm_recursive_rmdir (false, "local");
     rmdir(tmpdir, "s");
   end_unwind_protect
-  
+
 endfunction

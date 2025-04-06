@@ -10,7 +10,7 @@
  * WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see
  * <https://www.gnu.org/licenses/>.
@@ -86,7 +86,7 @@ public:
 	}
 	else {
           // TODO: pwm speed as well
-          AFMS = new Adafruit_MotorShield(data[0]); 
+          AFMS = new Adafruit_MotorShield(data[0]);
 
           uint16_t freq = data[1];
 	  freq = (freq<<8)|data[2];
@@ -107,7 +107,7 @@ public:
         break;
       }
       case MTRV2_INIT_DCMOTOR:
-      { 
+      {
 	// 0 = shieldid (spiaddress)
 	// 1 = motor num
 	if(datasz != 2) {
@@ -131,7 +131,7 @@ public:
 	break;
       }
       case MTRV2_FREE_DCMOTOR:
-      { 
+      {
 	// 0 = shieldid (spiaddress)
 	// 1 = motor num
 	if(datasz != 2) {
@@ -151,7 +151,7 @@ public:
 	break;
       }
       case MTRV2_STOP_DCMOTOR:
-      { 
+      {
 	// 0 = shieldid (spiaddress)
 	// 1 = motor num
 	if(datasz != 2) {
@@ -169,7 +169,7 @@ public:
 	break;
       }
       case MTRV2_START_DCMOTOR:
-      { 
+      {
 	// 0 = shieldid (spiaddress)
 	// 1 = motor num
 	// 2 = dir 1=forwrf, else reverse
@@ -193,7 +193,7 @@ public:
       }
 
       case MTRV2_INIT_STEPPER:
-      { 
+      {
 	// 0 = shieldid (spiaddress)
 	// 1 = motor num
 	// 2,3 = stepsprerev
@@ -218,7 +218,7 @@ public:
 	break;
       }
       case MTRV2_FREE_STEPPER:
-      { 
+      {
 	// 0 = shieldid (spiaddress)
 	// 1 = motor num
 	if(datasz != 2) {
@@ -237,7 +237,7 @@ public:
 	break;
       }
       case MTRV2_RELEASE_STEPPER:
-      { 
+      {
 	// 0 = shieldid (spiaddress)
 	// 1 = motor num
 	if(datasz != 2) {
@@ -254,7 +254,7 @@ public:
 	break;
       }
       case MTRV2_MOVE_STEPPER:
-      { 
+      {
 	// 0 = shieldid (spiaddress)
 	// 1 = motor num
 	// 2 = dir 1=forward, else reverse

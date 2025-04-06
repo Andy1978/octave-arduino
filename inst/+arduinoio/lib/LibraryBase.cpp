@@ -6,12 +6,12 @@
  * under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
@@ -153,7 +153,7 @@ OctaveLibraryBase::sendResponseMsg_P (uint8_t cmdID, const uint8_t *data PROGMEM
 {
   char tmp[256];
 
-  for (int i=0;i<sz;i++) 
+  for (int i=0;i<sz;i++)
     {
       tmp[i] = pgm_read_byte_near (data+i);
     }
@@ -171,7 +171,7 @@ OctaveLibraryBase::sendErrorMsg_P (const char *err PROGMEM)
   int len = 0;
 
   ch = pgm_read_byte_near (err);
-  while (ch != '\0' && len < 200) 
+  while (ch != '\0' && len < 200)
     {
       tmp[len] = ch;
       len ++;
@@ -238,7 +238,7 @@ OctaveArduinoClass::processMessage (uint8_t libid, uint8_t cmd, uint8_t *data, u
       libs[libid]->commandHandler((byte)cmd, (byte *)data, (unsigned int)sz);
       return 1;
     }
-  return 0; 
+  return 0;
 }
 
 #if defined(WIFI_STATIC_IP)
@@ -283,7 +283,7 @@ static IPAddress make_gateway_address(const char *str)
 #endif
 
 void
-OctaveArduinoClass::init () 
+OctaveArduinoClass::init ()
 {
   OCTAVE_COMMS_PORT.begin (ARDUINO_BAUDRATE);
 #if defined(OCTAVE_USE_WIFI_COMMS)
@@ -366,13 +366,13 @@ OctaveArduinoClass::runLoop()
 #else
   if (OCTAVE_COMMS_PORT.available())
     {
-    
+
       ch = OCTAVE_COMMS_PORT.read();
 #endif
 
       switch (msg_state)
         {
-          case STATE_SOH: 
+          case STATE_SOH:
             msg_hdr[STATE_SOH] = ch;
             if (ch == ARDUINO_SOH)
               msg_state = STATE_EXT;
@@ -380,7 +380,7 @@ OctaveArduinoClass::runLoop()
           case STATE_EXT:
             msg_hdr[STATE_EXT] = ch;
             msg_state = STATE_CMD;
-            break;      
+            break;
           case STATE_CMD:
             msg_hdr[STATE_CMD] = ch;
             msg_state = STATE_SIZE;
@@ -396,19 +396,19 @@ OctaveArduinoClass::runLoop()
           case STATE_DATA:
             if (msg_datapos < sizeof(msg_data))
               msg_data[msg_datapos] = ch;
-            msg_datapos ++;  
+            msg_datapos ++;
             if (msg_datapos == msg_hdr[STATE_SIZE])
               msg_state = STATE_EOM;
             break;
           default:
             msg_state = STATE_SOH;
-            break;  
-        }   
-   
+            break;
+        }
+
       if(msg_state == STATE_EOM)
         {
           msg_state = STATE_SOH;
-       
+
           processMessage (msg_hdr[STATE_EXT], msg_hdr[STATE_CMD], msg_data, msg_hdr[STATE_SIZE]);
         }
     }

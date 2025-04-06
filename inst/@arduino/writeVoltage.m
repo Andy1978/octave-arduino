@@ -1,16 +1,16 @@
 ## Copyright (C) 2025 Andreas Weber <octave@josoansi.de>
-## 
+##
 ## This program is free software: you can redistribute it and/or modify it
 ## under the terms of the GNU General Public License as published by
 ## the Free Software Foundation, either version 3 of the License, or
 ## (at your option) any later version.
-## 
+##
 ## This program is distributed in the hope that it will be useful, but
 ## WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
 
-## -*- texinfo -*- 
+## -*- texinfo -*-
 ## @deftypefn {} {} writeVoltage (@var{ar}, @var{pin}, @var{voltage})
 ## Output voltage out of a pin using a on-chip DAC.
 ##
@@ -71,10 +71,10 @@ function writeVoltage (obj, pin, value)
   val = value/maxvolts * (2 ^ dac_bits - 1);
 
 	datain = uint8([pininfo.id val]);
-  
+
 	ARDUINO_DAC = 7; # has to match OctaveCoreLibrary.cpp
 	[dataout, status] = __sendCommand__ (obj, 0, ARDUINO_DAC, datain);
-  
+
 endfunction
 
 %!shared ar, pwmpin

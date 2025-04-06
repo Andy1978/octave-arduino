@@ -6,12 +6,12 @@
  * under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
@@ -54,7 +54,7 @@ static uint8_t i2c_address = 0;
 
 #endif
 
-OctaveI2CLibrary::OctaveI2CLibrary (OctaveArduinoClass &oc) 
+OctaveI2CLibrary::OctaveI2CLibrary (OctaveArduinoClass &oc)
 {
   libName = "I2C";
 
@@ -85,7 +85,7 @@ OctaveI2CLibrary::commandHandler (uint8_t cmdID, uint8_t* data, uint8_t datasz)
                   return;
                 }
 
-              if (data[0] == 0) 
+              if (data[0] == 0)
                 {
                   Wire.beginTransmission (data[1]); // should be i2c_address
                   byte c;
@@ -96,7 +96,7 @@ OctaveI2CLibrary::commandHandler (uint8_t cmdID, uint8_t* data, uint8_t datasz)
                   Wire.endTransmission ();
                 }
 #if WIRE_INTERFACES_COUNT > 1
-              if (data[0] == 1) 
+              if (data[0] == 1)
                 {
                   Wire1.beginTransmission (data[1]); // should be i2c_address
                   byte c;
@@ -313,12 +313,12 @@ OctaveI2CLibrary::commandHandler (uint8_t cmdID, uint8_t* data, uint8_t datasz)
         {
           if (datasz == 2 || datasz == 3 || datasz == 5)
             {
-              // i2c bus  0 
+              // i2c bus  0
               // enable   1
               // i2caddress (optional)
-              // bitratehi 
+              // bitratehi
               // birtarelo
-	      
+
               if (data[0] >= WIRE_INTERFACES_COUNT || data[0] > 1)
                 {
                   sendErrorMsg_P (ERRORMSG_INVALID_DEVICE);
@@ -326,7 +326,7 @@ OctaveI2CLibrary::commandHandler (uint8_t cmdID, uint8_t* data, uint8_t datasz)
                 }
 
               // enable
-              if (data[1] == 1) 
+              if (data[1] == 1)
                 {
                   i2c_enabled[data[0]] = 1;
 
@@ -353,7 +353,7 @@ OctaveI2CLibrary::commandHandler (uint8_t cmdID, uint8_t* data, uint8_t datasz)
                       else
                         Wire.begin ();
 
-                      if (datasz == 5) 
+                      if (datasz == 5)
                         {
                           int32_t bitrate = (((uint32_t)data[3])<<8) | ((uint32_t)data[4]);
                           Wire.setClock (bitrate*1000L);
@@ -367,7 +367,7 @@ OctaveI2CLibrary::commandHandler (uint8_t cmdID, uint8_t* data, uint8_t datasz)
                       else
                         Wire1.begin ();
 
-                      if (datasz == 5) 
+                      if (datasz == 5)
                         {
                           int32_t bitrate = (((uint32_t)data[3])<<8) | ((uint32_t)data[4]);
                           Wire1.setClock (bitrate*1000L);
@@ -375,7 +375,7 @@ OctaveI2CLibrary::commandHandler (uint8_t cmdID, uint8_t* data, uint8_t datasz)
                     }
 #endif
                 }
-              else 
+              else
                 {
                   // disable
 #if defined (I2C_SUPPORTS_ENDCALL)

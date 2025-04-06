@@ -1,21 +1,21 @@
 ## Copyright (C) 2022 John Donoghue <john.donoghue@ieee.org>
-## 
+##
 ## This program is free software: you can redistribute it and/or modify it
 ## under the terms of the GNU General Public License as published by
 ## the Free Software Foundation, either version 3 of the License, or
 ## (at your option) any later version.
-## 
+##
 ## This program is distributed in the hope that it will be useful, but
 ## WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
-## 
+##
 ## You should have received a copy of the GNU General Public License
 ## along with this program.  If not, see
 ## <https://www.gnu.org/licenses/>.
 
 classdef SimpleStepper < arduinoio.LibraryBase
-  ## -*- texinfo -*- 
+  ## -*- texinfo -*-
   ## @deftypefn {} {} arduinoioaddons.SimpleStepper
   ## Stepper class for stepper control using ULN2003 and compatible drivers
   ## @end deftypefn
@@ -107,7 +107,7 @@ classdef SimpleStepper < arduinoio.LibraryBase
   ## None
   ##
   ## @end deftypefn
-  
+
   properties(Access = public)
     Speed = 1; # num secs per tick
   endproperties
@@ -150,7 +150,7 @@ classdef SimpleStepper < arduinoio.LibraryBase
       if (!isa (parentObj, "arduino"))
         error("expects arduino object");
       endif
- 
+
       obj.Parent = parentObj;
 
       obj.PinInfo = [];
@@ -182,7 +182,7 @@ classdef SimpleStepper < arduinoio.LibraryBase
 
         #obj.Parent.debug =1;
         [tmp, sz] = sendCommand(obj.Parent, obj.LibraryName, obj.INIT_COMMAND, uint8([obj.Id data]));
-    
+
       catch
         for i=1:numel(tmp_pins)
           configurePinResource(obj.Parent, tmp_pins{i}.name, tmp_pins{i}.owner, tmp_pins{i}.mode, true)
@@ -203,7 +203,7 @@ classdef SimpleStepper < arduinoio.LibraryBase
         configurePinResource(obj.Parent, obj.PinInfo{i}.name, obj.PinInfo{i}.owner, obj.PinInfo{i}.mode, true)
         configurePin(obj.Parent, obj.PinInfo{i}.name, obj.PinInfo{i}.mode)
       endfor
- 
+
     endfunction
 
     function move(obj, steps)

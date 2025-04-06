@@ -1,16 +1,16 @@
 ## Copyright (C) 2018 John Donoghue <john.donoghue@ieee.org>
-## 
+##
 ## This program is free software: you can redistribute it and/or modify it
 ## under the terms of the GNU General Public License as published by
 ## the Free Software Foundation, either version 3 of the License, or
 ## (at your option) any later version.
-## 
+##
 ## This program is distributed in the hope that it will be useful, but
 ## WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
 
-## -*- texinfo -*- 
+## -*- texinfo -*-
 ## @deftypefn {} {} writePWMDutyCyle (@var{ar}, @var{pin}, @var{value})
 ## Set pin to output a square wave with a specified duty cycle.
 ##
@@ -44,8 +44,8 @@ function writePWMDutyCycle (obj, pin, value)
   endif
   if (!isnumeric(value) || value > 1.0 || value < 0)
     error ("@arduino.writePWMDutyCycle: expected value between 0 .. 1");
-  endif  
-  
+  endif
+
   pininfo = obj.get_pin(pin);
 
   # first use ?
@@ -61,13 +61,13 @@ function writePWMDutyCycle (obj, pin, value)
   val = 255*value;
 
   datain = uint8([pininfo.id val]);
-  
+
   [dataout, status] = __sendCommand__ (obj, 0, ARDUINO_PWM, datain);
-  
+
   if status != 0
     error ("@arduino.writePWMDutyCycle: failed to set pin state err=%d - %s", status, char(dataout));
-  endif 
-  
+  endif
+
 endfunction
 
 %!shared ar, pwmpin

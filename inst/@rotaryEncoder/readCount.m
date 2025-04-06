@@ -1,20 +1,20 @@
 ## Copyright (C) 2018 John Donoghue <john.donoghue@ieee.org>
-## 
+##
 ## This program is free software: you can redistribute it and/or modify it
 ## under the terms of the GNU General Public License as published by
 ## the Free Software Foundation, either version 3 of the License, or
 ## (at your option) any later version.
-## 
+##
 ## This program is distributed in the hope that it will be useful, but
 ## WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
-## 
+##
 ## You should have received a copy of the GNU General Public License
 ## along with this program.  If not, see
 ## <https://www.gnu.org/licenses/>.
 
-## -*- texinfo -*- 
+## -*- texinfo -*-
 ## @deftypefn {} {[@var{count}, @var{time}] =} readCount (@var{obj})
 ## @deftypefnx {} {[@var{count}, @var{time}] =} readCount (@var{obj}, @var{name}, @var{value})
 ## read count value from the rotary encoder.
@@ -56,7 +56,7 @@ function [value, time] = readCount(obj, reset, resetvalue)
   if !(isnumeric(resetvalue) || islogical(resetvalue)) || (resetvalue != 0 && resetvalue != 1)
     error ("arduino: expected resetvalue of 0 or 1");
   endif
- 
+
   # attempt to clock out precision bits
   [tmp, sz] = sendCommand(obj.parent, "rotaryencoder", ARDUINO_ROTARYENCODER_READCOUNT, [obj.id resetvalue]);
   value = typecast(uint16(tmp(2))*256 + uint16(tmp(3)), 'int16');

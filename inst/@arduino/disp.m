@@ -1,16 +1,16 @@
 ## Copyright (C) 2018 John Donoghue <john.donoghue@ieee.org>
-## 
+##
 ## This program is free software: you can redistribute it and/or modify it
 ## under the terms of the GNU General Public License as published by
 ## the Free Software Foundation, either version 3 of the License, or
 ## (at your option) any later version.
-## 
+##
 ## This program is distributed in the hope that it will be useful, but
 ## WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
 
-## -*- texinfo -*- 
+## -*- texinfo -*-
 ## @deftypefn {} {} disp (@var{ar})
 ## Display the arduino object in a verbose way, showing the board and available pins.
 ##
@@ -34,7 +34,7 @@ function disp (ar)
 
     printf ("            port = ")
     disp (ar.config.port);
-  
+
     printf ("           board = ")
     disp (ar.config.board);
     printf ("       libraries = {\n")
@@ -69,18 +69,18 @@ function disp (ar)
       parts = sscanf(pin.name, "%c %d");
       nextpin = sprintf("%c%d", char(parts(1)), parts(2)+1);
     endfor
-  
+
     if !isempty(endpin)
       printf ("              %s - %s\n", startpin.name, endpin.name);
     elseif !isempty(startpin)
       printf ("              %s\n", startpin.name);
     endif
-   
+
     printf("        }\n");
   else
     printf ("      arduino object disconnected\n");
   endif
-  
+
   if ar.debug
     printf ("       config = \n");
     disp (ar.config);

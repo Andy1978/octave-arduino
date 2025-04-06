@@ -1,15 +1,15 @@
 ## Copyright (C) 2018 John Donoghue <john.donoghue@ieee.org>
-## 
+##
 ## This program is free software: you can redistribute it and/or modify it
 ## under the terms of the GNU General Public License as published by
 ## the Free Software Foundation, either version 3 of the License, or
 ## (at your option) any later version.
-## 
+##
 ## This program is distributed in the hope that it will be useful, but
 ## WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
-## 
+##
 ## You should have received a copy of the GNU General Public License
 ## along with this program.  If not, see
 ## <https://www.gnu.org/licenses/>.
@@ -22,14 +22,14 @@
 % arduino - hobby servo
 %
 % Connection  of arduino to test jig as follows:
-% Arduino   
+% Arduino
 %            24XX256 eeprom
 % A4      -  5
 % A5      -  6
 % 5V      -  8
 % GND     -  1,2,3,4
 %
-% Arduino     MCP3002 
+% Arduino     MCP3002
 % D10      -  1 (CS)
 % D11      -  5 (DI)
 % D12      -  6 (DO)
@@ -333,7 +333,7 @@ unwind_protect
     printf("unexpected a0 value %f\n", val);
   endif
 
-  # TODO: servo 
+  # TODO: servo
   printf("8. Servo\n");
   printf("* create servo...\n");
   s = servo(a, "d9", 'MinPulseDuration', 1e-3, 'MaxPulseDuration', 2e-3);
@@ -386,7 +386,7 @@ unwind_protect
     pin = leds{i};
     writeDigitalPin(a, pin, 0)
   endfor
- 
+
 unwind_protect_cleanup
   clear a
 end_unwind_protect

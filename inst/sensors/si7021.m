@@ -1,21 +1,21 @@
 ## Copyright (C) 2019-2022 John Donoghue <john.donoghue@ieee.org>
-## 
+##
 ## This program is free software: you can redistribute it and/or modify it
 ## under the terms of the GNU General Public License as published by
 ## the Free Software Foundation, either version 3 of the License, or
 ## (at your option) any later version.
-## 
+##
 ## This program is distributed in the hope that it will be useful, but
 ## WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
-## 
+##
 ## You should have received a copy of the GNU General Public License
 ## along with this program.  If not, see
 ## <https://www.gnu.org/licenses/>.
 
 classdef si7021 < handle
-  ## -*- texinfo -*- 
+  ## -*- texinfo -*-
   ## @deftypefn {} {} si7021
   ## SI7021 temperature and humidity sensor
   ## @end deftypefn
@@ -102,7 +102,7 @@ classdef si7021 < handle
   ##
   ## @var{readings} - table structure with fields for Timestamp, Temperature and Humidity.
   ## @end deftypefn
-  ## 
+  ##
   ## @deftypefn {} {@var{relH} =} info(@var{dsObj})
   ## Read the sensor info
   ##
@@ -143,7 +143,7 @@ classdef si7021 < handle
   ## @subsubheading Outputs
   ## None
   ## @end deftypefn
- 
+
   properties(Access = private, constant = true)
     SI7021_CHIPID_1 = [ 0xFA 0xF0 ];
     SI7021_CHIPID_2 = [ 0xFC 0xC9 ];
@@ -151,7 +151,7 @@ classdef si7021 < handle
     SI7021_TEMP_MEASURE_NOHOLD = 0xF3;
     SI7021_HUMIDITY_MEASURE_NOHOLD = 0xF5;
   endproperties
-  
+
   properties(Access = private)
     i2c;
   endproperties
@@ -244,7 +244,7 @@ classdef si7021 < handle
 
       C = readTemperature(this);
       H = readHumidity(this);
-      
+
       if nargout <= 2
         varargout{1} = struct('Time', timestamp, 'Temperature', C, 'Humidity', H);
         if nargout > 1

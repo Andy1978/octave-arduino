@@ -1,21 +1,21 @@
 ## Copyright (C) 2018-2020 John Donoghue <john.donoghue@ieee.org>
-## 
+##
 ## This program is free software: you can redistribute it and/or modify it
 ## under the terms of the GNU General Public License as published by
 ## the Free Software Foundation, either version 3 of the License, or
 ## (at your option) any later version.
-## 
+##
 ## This program is distributed in the hope that it will be useful, but
 ## WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
-## 
+##
 ## You should have received a copy of the GNU General Public License
 ## along with this program.  If not, see
 ## <https://www.gnu.org/licenses/>.
 
 classdef motorshieldv2 < arduinoio.LibraryBase
-  ## -*- texinfo -*- 
+  ## -*- texinfo -*-
   ## @deftypefn {} {} arduinoioaddons.adafruit.motorshieldv2
   ## Adafruit motor shield addon
   ##
@@ -66,10 +66,10 @@ classdef motorshieldv2 < arduinoio.LibraryBase
   ## @subsubheading Inputs
   ## @var{mObj} - the motor shield object
   ##
-  ## @var{mtrnum} - The servo motor number, where 1 is servo on 
+  ## @var{mtrnum} - The servo motor number, where 1 is servo on
   ## pin "d10" and 2 is a servo on pin "d9"
   ##
-  ## @var{propertyname}, @var{propertyvalue} - Optional property 
+  ## @var{propertyname}, @var{propertyvalue} - Optional property
   ## name/value pairs to pass to servo object.
   ##
   ## Properties are the same as the base servo object.
@@ -121,7 +121,7 @@ classdef motorshieldv2 < arduinoio.LibraryBase
   ##
   ## @var{mtrnum} - The motor number (1 - 4)
   ##
-  ## @var{propertyname}, @var{propertyvalue} - Optional property 
+  ## @var{propertyname}, @var{propertyvalue} - Optional property
   ## name/value pairs to pass to motor object.
   ##
   ## @subsubheading Outputs
@@ -133,8 +133,8 @@ classdef motorshieldv2 < arduinoio.LibraryBase
   properties(Access = private, Constant = true)
     INIT_COMMAND = hex2dec('00');
     FREE_COMMAND = hex2dec('01');
-  endproperties 
-  
+  endproperties
+
   properties(Access = protected, Constant = true)
     LibraryName = 'adafruit/MotorShieldV2';
     DependentLibraries = { "i2c", "servo" };
@@ -142,17 +142,17 @@ classdef motorshieldv2 < arduinoio.LibraryBase
     CppHeaderFile = fullfile(arduinoio.FilePath(mfilename('fullpath')), 'motorshieldv2.h');
     CppClassName = 'MotorShieldV2Addon';
   endproperties
-  
+
   properties(Access = private)
     i2c;
     cleanup;
   endproperties
-  
+
   properties(GetAccess = public, SetAccess = private)
     PWMFrequency;
     I2CAddress;
   endproperties
-  
+
   methods
     # constructor
     function obj = motorshieldv2(parentObj, varargin)
@@ -228,7 +228,7 @@ classdef motorshieldv2 < arduinoio.LibraryBase
     endfunction
 
   endmethods
-  
+
   methods (Access = public)
     function data = sendCommand(obj, commandid, data)
       [data,~] = sendCommand(obj.Parent, obj.LibraryName, commandid, [obj.i2c.i2caddress data]);

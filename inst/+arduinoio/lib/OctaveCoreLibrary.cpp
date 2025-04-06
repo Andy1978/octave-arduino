@@ -6,12 +6,12 @@
  * under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
@@ -117,7 +117,7 @@
   #if defined(ARDUINO_ARCH_SAMD) || defined (ARDUINO_ARCH_NRF52840) || defined (ARDUINO_ARCH_SAM) || defined (ARDUINO_ARCH_RP2040)
     #define BOARD_VOLTAGE 33
   #elif defined(ARDUINO_AVR_PRO) || defined(ARDUINO_AVR_PROMICRO)
-   #if F_CPU == 8000000L 
+   #if F_CPU == 8000000L
     #define BOARD_VOLTAGE 33
    #else
     #define BOARD_VOLTAGE 50
@@ -127,7 +127,7 @@
   #endif
 #endif
 
-static const int8_t map_config_mode[] PROGMEM = 
+static const int8_t map_config_mode[] PROGMEM =
 {
   INPUT, // unset
   INPUT, // analoginput
@@ -162,14 +162,14 @@ get_mode(uint8_t m)
 //#ifdef UNO_WIFI_REV2_328MODE
 //  #error ("Uno wifi firmware must be compiled without a 328 emultaion enabled")
 //#endif
-   
+
 static uint8_t pinconfig[NUM_TOTAL_PINS];
 
 #if defined (ARDUINO_ARCH_AVR) || defined (ARDUINO_ARCH_MEGAAVR)
 #include <avr/wdt.h>
 void
 reset ()
-{ 
+{
   wdt_enable (WDTO_1S);
   while(1) {}
 }
@@ -177,7 +177,7 @@ reset ()
 void
 reset ()
 {
-  // processor software reset 
+  // processor software reset
   NVIC_SystemReset ();
 }
 #elif defined (ARDUINO_ARCH_ESP32)
@@ -190,7 +190,7 @@ reset ()
   #error("Unimplemented architecture for reset")
 #endif
 
-OctaveCoreLibrary::OctaveCoreLibrary (OctaveArduinoClass &oc) 
+OctaveCoreLibrary::OctaveCoreLibrary (OctaveArduinoClass &oc)
   : occlass (oc)
 {
 
@@ -208,14 +208,14 @@ void
 OctaveCoreLibrary::commandHandler (uint8_t cmdID, uint8_t* data, uint8_t datasz)
 {
   int val;
-    
-  switch (cmdID) 
+
+  switch (cmdID)
     {
       case ARDUINO_RESET:
         sendResponseMsg (cmdID, 0, 0);
         reset ();
         break;
-        
+
       case ARDUINO_INIT:
 //      ** NOTE ** DO NOT use debugPrint in the init routine
 
@@ -241,7 +241,7 @@ OctaveCoreLibrary::commandHandler (uint8_t cmdID, uint8_t* data, uint8_t datasz)
 	data[6] = ARDUINO_ENDIAN | 0;
 
         sendResponseMsg (cmdID, data, 7);
-        break;  
+        break;
       case ARDUINO_GETLIB:
         {
           if(datasz != 1)
@@ -291,10 +291,10 @@ OctaveCoreLibrary::commandHandler (uint8_t cmdID, uint8_t* data, uint8_t datasz)
           {
             sendInvalidNumArgsMsg ();
           }
-        break; 
-        
+        break;
+
       case ARDUINO_DIGITAL:
-      
+
         if (datasz == 1)
           {
             val = digitalRead (data[0]);
@@ -302,22 +302,22 @@ OctaveCoreLibrary::commandHandler (uint8_t cmdID, uint8_t* data, uint8_t datasz)
               data[1] = 1;
             else
               data[1] = 0;
-          
+
             sendResponseMsg (cmdID, data, 2);
           }
         else if (datasz == 2)
           {
-            digitalWrite (data[0], data[1] ? HIGH : LOW); 
+            digitalWrite (data[0], data[1] ? HIGH : LOW);
             sendResponseMsg (cmdID, data, 0);
           }
         else
           {
             sendInvalidNumArgsMsg ();
           }
-       break;  
+       break;
 
       case ARDUINO_ANALOG:
-      
+
         if (datasz == 1)
           {
             val = analogRead (pinToAnalog(data[0]));
@@ -329,10 +329,10 @@ OctaveCoreLibrary::commandHandler (uint8_t cmdID, uint8_t* data, uint8_t datasz)
           {
             sendInvalidNumArgsMsg ();
           }
-        break;  
+        break;
 
       case ARDUINO_PWM:
-      
+
         if (datasz == 2)
           {
             analogWrite (data[0], data[1]);
@@ -342,7 +342,7 @@ OctaveCoreLibrary::commandHandler (uint8_t cmdID, uint8_t* data, uint8_t datasz)
           {
             sendInvalidNumArgsMsg ();
           }
-        break;  
+        break;
       case ARDUINO_PLAYTONE:
         if (datasz == 5)
           {

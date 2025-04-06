@@ -1,16 +1,16 @@
 ## Copyright (C) 2019-2021 John Donoghue <john.donoghue@ieee.org>
-## 
+##
 ## This program is free software: you can redistribute it and/or modify it
 ## under the terms of the GNU General Public License as published by
 ## the Free Software Foundation, either version 3 of the License, or
 ## (at your option) any later version.
-## 
+##
 ## This program is distributed in the hope that it will be useful, but
 ## WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
 
-## -*- texinfo -*- 
+## -*- texinfo -*-
 ## @deftypefn {} {@var{data} =} read (@var{dev}, @var{numbytes})
 ## @deftypefnx {} {@var{data} =} read (@var{dev}, @var{numbytes}, @var{precision})
 ## Read a specified number of bytes from a i2c or serial device object
@@ -81,7 +81,7 @@ function out = read (dev, numbytes, precision)
   if (strcmp (precision,'uint16') || strcmp (precision,'int16'))
     sz = sz/2;
     if (endian != getEndian(dev.parent))
-      out = swapbytes (out); 
+      out = swapbytes (out);
     endif
   else
     if (strcmp (precision, 'int8'))

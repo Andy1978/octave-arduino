@@ -1,17 +1,17 @@
 ## Copyright (C) 2018-2020 John Donoghue <john.donoghue@ieee.org>
-## 
+##
 ## This program is free software: you can redistribute it and/or modify it
 ## under the terms of the GNU General Public License as published by
 ## the Free Software Foundation, either version 3 of the License, or
 ## (at your option) any later version.
-## 
+##
 ## This program is distributed in the hope that it will be useful, but
 ## WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
 
 classdef i2cdev < handle
-  ## -*- texinfo -*- 
+  ## -*- texinfo -*-
   ## @deftypefn {} {@var{dev} =} i2cdev (@var{ar}, @var{address})
   ## @deftypefnx {} {@var{dev} =} i2cdev (@var{ar}, @var{address}, @var{propname}, @var{propvalue})
   ##
@@ -36,7 +36,7 @@ classdef i2cdev < handle
   ##
   ## @subsubheading Outputs
   ## @var{dev} - new created i2cdev object.
-  ## 
+  ##
   ## @subsubheading Properties
   ## The i2cdev object has the following public properties:
   ## @table @asis
@@ -72,7 +72,7 @@ classdef i2cdev < handle
         warning ("Octave:deprecated-function",
                  "spidev is obsolete and will be removed from a future version of arduino, please use 'device' instead");
       endif
- 
+
       if nargin < 2
         error("expects arduino object and address");
       endif

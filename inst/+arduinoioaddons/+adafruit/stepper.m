@@ -1,21 +1,21 @@
 ## Copyright (C) 2018 John Donoghue <john.donoghue@ieee.org>
-## 
+##
 ## This program is free software: you can redistribute it and/or modify it
 ## under the terms of the GNU General Public License as published by
 ## the Free Software Foundation, either version 3 of the License, or
 ## (at your option) any later version.
-## 
+##
 ## This program is distributed in the hope that it will be useful, but
 ## WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
-## 
+##
 ## You should have received a copy of the GNU General Public License
 ## along with this program.  If not, see
 ## <https://www.gnu.org/licenses/>.
 
 classdef stepper < arduinoio.AddonBase
-  ## -*- texinfo -*- 
+  ## -*- texinfo -*-
   ## @deftypefn {} {} arduinoioaddons.adafruit.stepper
   ## Stepper class for stepper control on the adafruit motor shield
   ##
@@ -27,7 +27,7 @@ classdef stepper < arduinoio.AddonBase
   ## @item @var{RPM}
   ## The rpm value set for the stepper motor
   ## @item StepType
-  ## the StepType for the stepper (string) which can be "single", 
+  ## the StepType for the stepper (string) which can be "single",
   ## "double", "interleave" or "microstep"
   ## @item StepsPerRevolution
   ## the StepsPerRevoluion for the stepper (read only)
@@ -48,7 +48,7 @@ classdef stepper < arduinoio.AddonBase
   ##
   ## @var{stepsperrev} - Number of steps per revolution.
   ##
-  ## @var{propertyname, propertyvalue} - Optional property 
+  ## @var{propertyname, propertyvalue} - Optional property
   ## name/value pairs to pass to motor object.
   ##
   ## Current known properties are:
@@ -56,7 +56,7 @@ classdef stepper < arduinoio.AddonBase
   ## @item RPM
   ## the RPM for the stepper (revolutions per minute)
   ## @item StepType
-  ## the StepType for the stepper (string) which can be 
+  ## the StepType for the stepper (string) which can be
   ## "single", "double", "interleave" or "microstep"
   ## @end table
   ##
@@ -103,7 +103,7 @@ classdef stepper < arduinoio.AddonBase
     MOVE_COMMAND = hex2dec('12');
     RELEASE_COMMAND = hex2dec('13');
   endproperties
-  
+
   properties(Access = private)
     cleanup;
   endproperties
@@ -134,7 +134,7 @@ classdef stepper < arduinoio.AddonBase
 ##      endif
 
       p = inputParser(CaseSensitive=false, FunctionName='adafruit/stepper');
-      
+
       validate_shield = @(x) isa(x, "arduinoioaddons.adafruit.motorshieldv2");
       validate_mtrnum = @(x) (isnumeric(x) && isscalar(x) && (x ==1 || x ==2));
       validate_steps = @(x) (isnumeric(x) && isscalar(x) && (x > 0));
@@ -142,12 +142,12 @@ classdef stepper < arduinoio.AddonBase
 
       p.addRequired('shield',validate_shield);
       p.addRequired('mnum',validate_mtrnum);
-      p.addRequired('stepsperrev',validate_steps);      
-      
+      p.addRequired('stepsperrev',validate_steps);
+
       p.addParameter('RPM', 0, validate_rpm);
       p.addParameter('StepType', "single", @(x) any(validatestring(x,{"single", "double", "interleave", "microstep"})));
       p.parse(shield, mnum, stepsperrev, varargin{:});
-      
+
       this.Parent = p.Results.shield;
       this.MotorNumber = p.Results.mnum;
       this.StepsPerRevolution = p.Results.stepsperrev;
@@ -217,6 +217,6 @@ classdef stepper < arduinoio.AddonBase
     endfunction
 
   endmethods
- 
+
 endclassdef
 

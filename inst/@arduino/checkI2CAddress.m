@@ -1,20 +1,20 @@
 ## Copyright (C) 2019 John Donoghue <john.donoghue@ieee.org>
-## 
+##
 ## This program is free software: you can redistribute it and/or modify it
 ## under the terms of the GNU General Public License as published by
 ## the Free Software Foundation, either version 3 of the License, or
 ## (at your option) any later version.
-## 
+##
 ## This program is distributed in the hope that it will be useful, but
 ## WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
-## 
+##
 ## You should have received a copy of the GNU General Public License
 ## along with this program.  If not, see
 ## <https://www.gnu.org/licenses/>.
 
-## -*- texinfo -*- 
+## -*- texinfo -*-
 ## @deftypefn {} {@var{retval} =} checkI2CAddress (@var{ar}, @var{address})
 ## @deftypefnx {} {@var{retval} =} checkI2CAddress (@var{ar}, @var{address}, @var{bus})
 ## Check that an address of given address responds on the I2C bus
@@ -26,7 +26,7 @@
 ##
 ## @var{bus} - bus number to check for I2C device, when multiple buses are available.
 ## If the bus is not specified, it will default to 0.
-## 
+##
 ## @subsubheading Outputs
 ## @var{retval} - boolean value of true if address responds on the I2C bus
 ##
@@ -69,7 +69,7 @@ function ret = checkI2CAddress (ar, address, bus)
   if !isnumeric (address) || address < 1 || address > 127
     error ('checkI2CAddress: expected address to be numeric 1 > address <= 127');
   endif
-  
+
   # TODO: configure SPI pins if not already done??
 
   [tmp, sz] = sendCommand (ar, "i2c", ARDUINO_I2C_SCAN, [bus address]);

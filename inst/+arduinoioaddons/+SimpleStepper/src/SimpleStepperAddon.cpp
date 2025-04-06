@@ -10,7 +10,7 @@
  * WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see
  * <https://www.gnu.org/licenses/>.
@@ -62,7 +62,7 @@ public:
       }
     else
       {
-        ticksperstep = ticks;    
+        ticksperstep = ticks;
       }
   }
   unsigned long getTicksPerStep() const
@@ -87,7 +87,7 @@ public:
     pinMode(pins[1], OUTPUT);
     pinMode(pins[2], OUTPUT);
     pinMode(pins[3], OUTPUT);
-    
+
     direction = 0;
     laststeptick = 0;
     curr_step = 0;
@@ -117,7 +117,7 @@ public:
     pinMode(pins[2], OUTPUT);
     pinMode(pins[3], OUTPUT);
     pinMode(pins[4], OUTPUT);
-    
+
     direction = 0;
     laststeptick = 0;
     curr_step = 0;
@@ -151,7 +151,7 @@ public:
       {
         direction = -1;
       }
-    else 
+    else
       {
         direction = 1;
       }
@@ -340,9 +340,9 @@ getStepper (uint8_t id)
   uint8_t i;
   AddonStepper * unused = 0;
 
-  for (i=0;i<MAX_SIMPLESTEPPERS;i++) 
+  for (i=0;i<MAX_SIMPLESTEPPERS;i++)
     {
-      if (steppers[i].num_pins) 
+      if (steppers[i].num_pins)
         {
           if (steppers[i].id == id)
             return &steppers[i];
@@ -463,7 +463,7 @@ void SimpleStepperAddon::commandHandler(uint8_t cmdID, uint8_t* data, uint8_t da
               datasz = 5;
 
               sendResponseMsg (cmdID, data, datasz);
- 
+
             }
           else
             {

@@ -1,16 +1,16 @@
 ## Copyright (C) 2018 John Donoghue <john.donoghue@ieee.org>
-## 
+##
 ## This program is free software: you can redistribute it and/or modify it
 ## under the terms of the GNU General Public License as published by
 ## the Free Software Foundation, either version 3 of the License, or
 ## (at your option) any later version.
-## 
+##
 ## This program is distributed in the hope that it will be useful, but
 ## WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
 
-## -*- texinfo -*- 
+## -*- texinfo -*-
 ## @deftypefn {} {} write (@var{dev}, @var{datain})
 ## @deftypefnx {} {} write (@var{dev}, @var{datain}, @var{precision})
 ## Write data to a i2cdev object
@@ -19,7 +19,7 @@
 ## @subsubheading Inputs
 ## @var{dev} - connected i2c device opened using i2cdev
 ##
-## @var{datain} - data to write to device. Datasize should not exceed the constraints 
+## @var{datain} - data to write to device. Datasize should not exceed the constraints
 ## of the data type specified for the precision.
 ##
 ## @var{precision} - Optional precision for the input write data.
@@ -35,7 +35,7 @@ function write (dev, datain, precision)
   endif
 
   persistent ARDUINO_I2C_WRITE = 6;
- 
+
   if nargin < 2 || nargin > 3
     print_usage ();
   endif
@@ -55,13 +55,13 @@ function write (dev, datain, precision)
   if (strcmp (precision,'uint16'))
     datain = uint16(datain);
     if (endian == 'L' && strcmp (dev.bitorder,'msbfirst')) || (endian == 'B' && strcmp (dev.bitorder, 'lsbfirst'))
-      datain = swapbytes (datain); 
+      datain = swapbytes (datain);
     endif
     datain = typecast (datain, 'uint8');
   elseif (strcmp (precision,'int16'))
     datain = int16(datain);
     if (endian == 'L' && strcmp (dev.bitorder,'msbfirst')) || (endian == 'B' && strcmp (dev.bitorder, 'lsbfirst'))
-      datain = swapbytes (datain); 
+      datain = swapbytes (datain);
     endif
     datain = typecast (datain, 'uint8');
   else

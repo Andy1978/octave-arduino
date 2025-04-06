@@ -1,16 +1,16 @@
 ## Copyright (C) 2018 John Donoghue <john.donoghue@ieee.org>
-## 
+##
 ## This program is free software: you can redistribute it and/or modify it
 ## under the terms of the GNU General Public License as published by
 ## the Free Software Foundation, either version 3 of the License, or
 ## (at your option) any later version.
-## 
+##
 ## This program is distributed in the hope that it will be useful, but
 ## WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
 
-## -*- texinfo -*- 
+## -*- texinfo -*-
 ## @deftypefn {} {@var{value} =} readAnalogPin (@var{ar}, @var{pin})
 ## Read analog voltage of  @var{pin}.
 ##
@@ -20,14 +20,14 @@
 ## @var{pin} - string name of the pin to read.
 ##
 ## @subsubheading Outputs
-## @var{value} - analog value of the pin 
+## @var{value} - analog value of the pin
 ##
 ## @subsubheading Example
 ## @example
 ## @code{
 ## ar = arduino ();
 ## readAnalogPin(ar, "A4");
-## ans = 
+## ans =
 ##     87
 ## }
 ## @end example
@@ -43,7 +43,7 @@ function value = readAnalogPin (obj, pin)
   if !ischar(pin)
     error ("@arduino.readAnalogPin: expected pin name as string");
   endif
-   
+
   pininfo = obj.get_pin(pin);
 
   # first use ?
@@ -55,17 +55,17 @@ function value = readAnalogPin (obj, pin)
       error ("readAnalogPin: pin is in incompatable mode");
     endif
   endif
- 
+
   datain = uint8([pininfo.id]);
-  
+
   [dataout, status] = __sendCommand__ (obj, 0, ARDUINO_ANALOG, datain);
- 
+
   if status != 0
     error ("readVoltage: failed to set pin state err=%d - %s", status, char(dataout));
-  endif 
-  
+  endif
+
   value = (uint16(dataout(2))*256 + uint16(dataout(3)));
-  
+
 endfunction
 
 %!shared ar

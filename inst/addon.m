@@ -1,20 +1,20 @@
 ## Copyright (C) 2018 John Donoghue <john.donoghue@ieee.org>
-## 
+##
 ## This program is free software: you can redistribute it and/or modify it
 ## under the terms of the GNU General Public License as published by
 ## the Free Software Foundation, either version 3 of the License, or
 ## (at your option) any later version.
-## 
+##
 ## This program is distributed in the hope that it will be useful, but
 ## WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
-## 
+##
 ## You should have received a copy of the GNU General Public License
 ## along with this program.  If not, see
 ## <https://www.gnu.org/licenses/>.
 
-## -*- texinfo -*- 
+## -*- texinfo -*-
 ## @deftypefn {} {@var{retval} =} addon (@var{ar}, @var{addonname})
 ## @deftypefnx {} {@var{retval} =} addon (@var{ar}, @var{addonname}, varargs)
 ## Create an addon object using the addon named class.
@@ -22,21 +22,21 @@
 ## @subsubheading Inputs
 ## @var{ar} - connected arduino object
 ##
-## @var{addonname} - the name of the addon to create. The addon name can be a user 
-## addon or an inbuilt addon, however must appear in the listArduinoLibraries 
+## @var{addonname} - the name of the addon to create. The addon name can be a user
+## addon or an inbuilt addon, however must appear in the listArduinoLibraries
 ## output and have been programmed onto the arduino.
 ##
 ## @var{varargs} - optional values that will be provided verbatim to the
 ## the addon class constructor.
 ##
 ## @subsubheading Outputs
-## @var{retval} - cell array of string library names. 
+## @var{retval} - cell array of string library names.
 ##
 ## @seealso{arduino, arduinosetup, listArduinoLibraries}
 ## @end deftypefn
 
 function retval = addon (ar, addonname, varargin)
-  
+
   if (! isa (ar, "arduino"))
     error("addon: expected first arguiment to be a arduino object");
   endif
@@ -60,17 +60,17 @@ function retval = addon (ar, addonname, varargin)
       error ("addon: unknown library '%s'", addonname);
     endif
 
-    # a known normal addon like spi   
+    # a known normal addon like spi
     if strcmpi (addonname, "spi")
-      lib = "spidev";  
+      lib = "spidev";
     elseif strcmpi (addonname, "i2c")
-      lib = "i2cdev"; 
+      lib = "i2cdev";
     elseif strcmpi (addonname, "servo")
-      lib = "servo"; 
+      lib = "servo";
     elseif strcmpi (addonname, "shiftregister")
-      lib = "shiftRegister"; 
+      lib = "shiftRegister";
     elseif strcmpi (addonname, "rotaryencoder")
-      lib = "rotaryEncoder"; 
+      lib = "rotaryEncoder";
     else
       error ("addon: unknown builtin library '%s'", addonname);
     endif

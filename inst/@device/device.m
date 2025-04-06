@@ -1,17 +1,17 @@
 ## Copyright (C) 2019-2020 John Donoghue <john.donoghue@ieee.org>
-## 
+##
 ## This program is free software: you can redistribute it and/or modify it
 ## under the terms of the GNU General Public License as published by
 ## the Free Software Foundation, either version 3 of the License, or
 ## (at your option) any later version.
-## 
+##
 ## This program is distributed in the hope that it will be useful, but
 ## WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
 
 classdef device < handle
-  ## -*- texinfo -*- 
+  ## -*- texinfo -*-
   ## @deftypefn {} {@var{dev} =} device (@var{ar}, 'I2CAddress', @var{address})
   ## @deftypefnx {} {@var{dev} =} device (@var{ar}, 'SPIChipSelectPin', @var{pin})
   ## @deftypefnx {} {@var{dev} =} device (@var{ar}, 'Serial', @var{serialid})
@@ -73,7 +73,7 @@ classdef device < handle
   ##
   ## @subsubheading Outputs
   ## @var{dev} - new created device object.
-  ## 
+  ##
   ## @subsubheading Properties
   ## The object has the following public properties:
   ## @table @asis
@@ -82,7 +82,7 @@ classdef device < handle
   ## @item interface
   ## The interface type for this device ("SPI" or "I2C" or "Serial")
   ## @end table
-  ## 
+  ##
   ## In addition, depending on type, the object will have these properties:
   ##
   ## @subsubheading I2C Properties
@@ -145,7 +145,7 @@ classdef device < handle
     interface = "";
     resourceowner = "";
   endproperties
- 
+
   methods (Access = public)
 
     function this = device(varargin)
@@ -294,7 +294,7 @@ classdef device < handle
         if strcmp(getResourceOwner(this.parent, this.devinfo.chipselectpin), this.resourceowner)
           error ("pin %s is already in use by SPI", this.devinfo.chipselectpin)
         endif
-  
+
         if isfirst
           terms = getSPITerminals(this.parent);
           tmp_pins = this.parent.get_pingroup(terms{1}, "SPI");
@@ -349,14 +349,14 @@ classdef device < handle
               endif
             endif
           endfor
- 
+
           bitorder = 0;
           if strcmp(this.devinfo.bitorder, 'lsbfirst')
             bitorder = 1;
           endif
- 
+
           [tmp, sz] = sendCommand(this.parent, this.resourceowner, ARDUINO_SPI_CONFIG, [this.id 1 this.devinfo.mode bitorder]);
-  
+
           incrementResourceCount(this.parent, this.resourceowner);
         catch
           for i=1:numel(tmp_pins)
@@ -407,7 +407,7 @@ classdef device < handle
         this.devinfo.timeout = 1.0;
         this.id = p.Results.Serial;
 
-        name = ["uart" num2str(this.id) "_"]; 
+        name = ["uart" num2str(this.id) "_"];
         this.pins = this.parent.get_group(name);
         if numel(this.pins) == 0
           error("Not a known serial number '%d'", this.id)
@@ -421,7 +421,7 @@ classdef device < handle
           for i=1:2
             configurePin(this.parent, this.pins{i}.name, "reserved")
           endfor
- 
+
           baudrate = uint32(this.devinfo.baudrate);
           baudin = [ bitand(bitshift(baudrate,-24), 255) bitand(bitshift(baudrate,-16), 255), bitand(bitshift(baudrate,-8), 255), bitand(baudrate, 255)];
 
@@ -521,7 +521,7 @@ endclassdef
 %!test
 %! ar = arduino();
 %! spi = device(ar, "spichipselectpin", "d10");
-%! fail ('device(ar, "spichipselectpin", "d10");', 'pin d10 is already in use') 
+%! fail ('device(ar, "spichipselectpin", "d10");', 'pin d10 is already in use')
 %! spi2 = device(ar, "spichipselectpin", "d5");
 %! delete(spi);
 %! delete(spi2);
