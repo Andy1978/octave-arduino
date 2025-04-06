@@ -31,6 +31,7 @@
 #define ARDUINO_ANALOG      4
 #define ARDUINO_PWM         5
 #define ARDUINO_PLAYTONE    6
+#define ARDUINO_DAC         7
 
 #define ARDUINO_GETLIB      8
 
@@ -138,6 +139,7 @@ static const int8_t map_config_mode[] PROGMEM =
   OUTPUT, // servo
   OUTPUT, // spi TODO ?
   INPUT,  // interrupt
+  OUTPUT, // dac
   -1,     // reserved
 };
 
@@ -368,6 +370,20 @@ OctaveCoreLibrary::commandHandler (uint8_t cmdID, uint8_t* data, uint8_t datasz)
             sendInvalidNumArgsMsg ();
           }
         break;
+
+      case ARDUINO_DAC:
+
+        if (datasz == 2)
+          {
+            analogWrite (data[0], data[1]);
+            sendResponseMsg (cmdID, data, 0);
+          }
+        else
+          {
+            sendInvalidNumArgsMsg ();
+          }
+        break;
+
       case ARDUINO_VERSION:
         {
           data[0] = VERSION_MAJOR;

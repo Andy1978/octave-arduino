@@ -54,6 +54,8 @@
 ## - Specify a pin to use with SPI protocol
 ## @item Interrupt
 ## - Specify a pin to use for with interrupts
+## @item DAC
+## - Specify pin to use on-chip DAC (Digital-to-analog converter)
 ## @item Reserved
 ## - Specify a pin to be reserved
 ## @item Unset

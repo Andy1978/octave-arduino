@@ -40,8 +40,10 @@ function [pstate, pmode]  = pinStateMode (pinStateVal)
         pstate = 3;  pmode="spi"; % for now just setting as output
       case "interrupt"
         pstate = 2;  pmode="interrupt"; % for now just setting as input
+      case "dac"
+        pstate = 10; pmode = "dac";
       case "reserved"
-        pstate = 10;  pmode="reserved"; 
+        pstate = 11;  pmode="reserved";
       otherwise
         error ("unknown pin state %s", pinStateVal);
     endswitch
@@ -66,6 +68,8 @@ function [pstate, pmode]  = pinStateMode (pinStateVal)
       case 9
         pstate = "interrupt";  pmode="interrupt";
       case 10
+        pstate = "dac";  pmode="dac";
+      case 11
         pstate = "reserved";  pmode="reserved";
       otherwise
         pstate = "unset"; pmode="";
