@@ -23,7 +23,7 @@ function retval = config_uno_wifi_r4 (initdata)
   retval = {};
 
   retval.board = 'uno_wifi_r4';
-  retval.mcu = 'Renesis RA4M1';
+  retval.mcu = 'Renesas RA4M1';
   retval.baudrate = 9600;
   retval.voltref = 0;
   retval.libs = {};

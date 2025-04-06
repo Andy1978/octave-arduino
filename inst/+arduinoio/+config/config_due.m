@@ -104,8 +104,8 @@ function retval = config_due (initdata)
   retval.pins{end+1} = arduinoio.config.pin_info('A10', 64, { 'digital', 'analog' });
   retval.pins{end+1} = arduinoio.config.pin_info('A11', 65, { 'digital', 'analog' });
 
-  retval.pins{end+1} = arduinoio.config.pin_info('D66', 66, { 'digital' }); # DAC0
-  retval.pins{end+1} = arduinoio.config.pin_info('D67', 67, { 'digital' }); # DAC1
+  retval.pins{end+1} = arduinoio.config.pin_info('D66', 66, { 'digital', 'dac0' });
+  retval.pins{end+1} = arduinoio.config.pin_info('D67', 67, { 'digital', 'dac1' });
   retval.pins{end+1} = arduinoio.config.pin_info('D68', 68, { 'digital' }); # CANRX
   retval.pins{end+1} = arduinoio.config.pin_info('D69', 69, { 'digital' }); # CANTX
   retval.pins{end+1} = arduinoio.config.pin_info('D70', 70, { 'digital', 'i2c1_sda' });
