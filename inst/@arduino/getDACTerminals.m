@@ -37,5 +37,5 @@ endfunction
 %! ar = arduino();
 %! assert(!isempty(ar));
 %! terms = getDACTerminals(ar);
-%! Only some (for example Arduino Uno Minima R4, Arduino Due, mkr1000) have a real DAC
+%! # Only some (for example Arduino Uno Minima R4, Arduino Due, mkr1000) have a real DAC
 %! assert (numel(terms) >= 0)

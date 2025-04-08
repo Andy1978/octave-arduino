@@ -77,7 +77,7 @@ function writeVoltage (obj, pin, value)
 
 endfunction
 
-%!shared ar, pwmpin
+%!shared ar, dacpin
 %! ar = arduino();
 %! dacpin = getPinsFromTerminals(ar, getDACTerminals(ar)){1};
 
