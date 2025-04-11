@@ -124,7 +124,7 @@ OctaveSPILibrary::OctaveSPILibrary (OctaveArduinoClass &oc)
 }
 
 void
-OctaveSPILibrary::commandHandler (uint8_t cmdID, uint8_t* data, uint8_t datasz)
+OctaveSPILibrary::commandHandler (uint8_t cmdID, uint8_t* data, uint16_t datasz)
 {
   switch (cmdID)
     {

@@ -22,7 +22,7 @@ class OctaveSerialLibrary : public LibraryBase
 public:
    OctaveSerialLibrary(OctaveArduinoClass &oc);
    void setup();
-   void commandHandler(uint8_t cmdID, uint8_t* inputs, uint8_t payload_size);
+   void commandHandler(uint8_t cmdID, uint8_t* inputs, uint16_t datasz);
 };
 
 

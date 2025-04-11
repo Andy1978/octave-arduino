@@ -23,6 +23,6 @@ class SimpleStepperAddon : public LibraryBase
 public:
   SimpleStepperAddon(OctaveArduinoClass& a);
 
-  void commandHandler(uint8_t cmdID, uint8_t* data, uint8_t datasz);
+  void commandHandler(uint8_t cmdID, uint8_t* data, uint16_t datasz);
   virtual void loop();
 };

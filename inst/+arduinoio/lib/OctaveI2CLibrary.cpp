@@ -62,7 +62,7 @@ OctaveI2CLibrary::OctaveI2CLibrary (OctaveArduinoClass &oc)
 }
 
 void
-OctaveI2CLibrary::commandHandler (uint8_t cmdID, uint8_t* data, uint8_t datasz)
+OctaveI2CLibrary::commandHandler (uint8_t cmdID, uint8_t* data, uint16_t datasz)
 {
   switch (cmdID)
     {

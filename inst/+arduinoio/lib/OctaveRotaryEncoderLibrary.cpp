@@ -159,7 +159,7 @@ OctaveRotaryEncoderLibrary::OctaveRotaryEncoderLibrary (OctaveArduinoClass &oc)
 }
 
 void
-OctaveRotaryEncoderLibrary::commandHandler (uint8_t cmdID, uint8_t* data, uint8_t datasz)
+OctaveRotaryEncoderLibrary::commandHandler (uint8_t cmdID, uint8_t* data, uint16_t datasz)
 {
   switch (cmdID)
     {

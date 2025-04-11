@@ -129,7 +129,7 @@ OctaveUltrasonicLibrary::OctaveUltrasonicLibrary (OctaveArduinoClass &oc)
 }
 
 void
-OctaveUltrasonicLibrary::commandHandler (uint8_t cmdID, uint8_t* data, uint8_t datasz)
+OctaveUltrasonicLibrary::commandHandler (uint8_t cmdID, uint8_t* data, uint16_t datasz)
 {
   switch (cmdID)
     {

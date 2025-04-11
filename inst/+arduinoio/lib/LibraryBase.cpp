@@ -78,10 +78,10 @@ OctaveLibraryBase::loop ()
 
 void OctaveLibraryBase::commandHandler(byte cmdID, byte* inputs, unsigned int payload_size)
 {
-  commandHandler((uint8_t)cmdID, (uint8_t*)inputs, (uint8_t)payload_size);
+  commandHandler((uint8_t)cmdID, (uint8_t*)inputs, (uint16_t)payload_size);
 }
 
-void OctaveLibraryBase::commandHandler(uint8_t cmdID, uint8_t* inputs, uint8_t payload_size)
+void OctaveLibraryBase::commandHandler(uint8_t cmdID, uint8_t* inputs, uint16_t payload_size)
 {
   sendErrorMsg_P(ERRORMSG_UNIMPLEMENTED);
 }
@@ -235,7 +235,7 @@ OctaveArduinoClass::processMessage (uint8_t libid, uint8_t cmd, uint8_t *data, u
     }
   else
     {
-      libs[libid]->commandHandler((byte)cmd, (byte *)data, (unsigned int)sz);
+      libs[libid]->commandHandler((byte)cmd, (byte *)data, sz);
       return 1;
     }
   return 0;

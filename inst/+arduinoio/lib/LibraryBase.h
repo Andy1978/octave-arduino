@@ -42,7 +42,7 @@ public:
   String libName;
   int id;
 
-  virtual void commandHandler(uint8_t cmdID, uint8_t* inputs, uint8_t payload_size);
+  virtual void commandHandler(uint8_t cmdID, uint8_t* inputs, uint16_t payload_size);
 
   // matlab compatability
   virtual void commandHandler(byte cmdID, byte* inputs, unsigned int payload_size);
