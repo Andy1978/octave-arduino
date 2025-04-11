@@ -55,8 +55,8 @@ public:
   #define ARDUINO_ERROR       255
   #define ARDUINO_WAIT        254
   #define ARDUINO_DEBUG       253
-  void sendResponseMsg(uint8_t cmdID, const uint8_t *data, uint8_t sz);
-  void sendResponseMsg_P(uint8_t cmdID, const uint8_t *data PROGMEM, uint8_t sz);
+  void sendResponseMsg(uint8_t cmdID, const uint8_t *data, uint16_t sz);
+  void sendResponseMsg_P(uint8_t cmdID, const uint8_t *data PROGMEM, uint16_t sz);
 
   void sendErrorMsg(const char *msg);
   void sendErrorMsg_P(const char *msg PROGMEM);
@@ -71,9 +71,9 @@ typedef OctaveLibraryBase LibraryBase;
 class OctaveArduinoClass
 {
   uint8_t msg_state;
-  uint8_t msg_datapos;
-  uint8_t msg_hdr[4];
-  uint8_t msg_data[256];
+  uint16_t msg_datapos;
+  uint8_t msg_hdr[5];
+  uint8_t msg_data[4096];
 
   #define MAX_ARDUINO_LIBS 20
   int libcount;
@@ -87,7 +87,8 @@ public:
   void init();
   void runLoop();
 private:
-  uint8_t processMessage(uint8_t libid, uint8_t cmd, uint8_t *data, uint8_t sz);
+  uint8_t processMessage(uint8_t libid, uint8_t cmd, uint8_t *data, uint16_t sz);
+  uint16_t getMsgLen();
 };
 
 // for matlab compatability

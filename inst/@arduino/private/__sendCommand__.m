@@ -51,7 +51,7 @@ function [dataOut, errcode] = __sendCommand__ (obj, libid, cmd, data, timeout)
      data = cell2mat(data);
    endif
 
-   hdr = uint8([ hex2dec("A5") libid cmd numel(data)]);
+   hdr = uint8([0xA5 libid cmd serialize_to_uint8(numel(data),"uint16")]);
 
    set(obj.connected, "timeout", timeout);
 

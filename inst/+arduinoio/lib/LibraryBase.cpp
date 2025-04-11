@@ -23,12 +23,13 @@
 
 #define ARDUINO_SOH         0xA5
 
-#define STATE_SOH  0
-#define STATE_EXT  1
-#define STATE_CMD  2
-#define STATE_SIZE 3
-#define STATE_DATA 4
-#define STATE_EOM  5
+#define STATE_SOH   0
+#define STATE_EXT   1
+#define STATE_CMD   2
+#define STATE_SIZE0 3
+#define STATE_SIZE1 4
+#define STATE_DATA  5
+#define STATE_EOM   6
 
 #if defined(OCTAVE_USE_WIFI_COMMS)
 # if defined(ARDUINO_ARCH_ESP32) || defined(ARDUINO_ARCH_RENESAS)
@@ -87,8 +88,12 @@ void OctaveLibraryBase::commandHandler(uint8_t cmdID, uint8_t* inputs, uint16_t 
 }
 
 void
-OctaveLibraryBase::sendResponseMsg (uint8_t cmdID, const uint8_t *data, uint8_t sz)
+OctaveLibraryBase::sendResponseMsg (uint8_t cmdID, const uint8_t *data, uint16_t sz)
 {
+	uint8_t sz_tmp[2];
+	sz_tmp[0] = (sz >> 8) & 0xFF;
+	sz_tmp[1] = sz & 0xFF;
+
 #if defined(OCTAVE_USE_WIFI_COMMS)
 
   if(wifi_status == 1)
@@ -96,7 +101,7 @@ OctaveLibraryBase::sendResponseMsg (uint8_t cmdID, const uint8_t *data, uint8_t 
     wifi_client.write ((uint8_t)ARDUINO_SOH);
     wifi_client.write ((uint8_t)id);
     wifi_client.write (cmdID);
-    wifi_client.write (sz);
+    wifi_client.write (sz_tmp, 2);
     if(sz)
       {
         wifi_client.write (data, sz);
@@ -106,7 +111,7 @@ OctaveLibraryBase::sendResponseMsg (uint8_t cmdID, const uint8_t *data, uint8_t 
   OCTAVE_COMMS_PORT.write ((uint8_t)ARDUINO_SOH);
   OCTAVE_COMMS_PORT.write ((uint8_t)id);
   OCTAVE_COMMS_PORT.write (cmdID);
-  OCTAVE_COMMS_PORT.write (sz);
+  OCTAVE_COMMS_PORT.write (sz_tmp, 2);
   if(sz)
     {
       OCTAVE_COMMS_PORT.write (data, sz);
@@ -149,7 +154,7 @@ OctaveLibraryBase::debugPrint (const char *err, ...)
 }
 
 void
-OctaveLibraryBase::sendResponseMsg_P (uint8_t cmdID, const uint8_t *data PROGMEM, uint8_t sz)
+OctaveLibraryBase::sendResponseMsg_P (uint8_t cmdID, const uint8_t *data PROGMEM, uint16_t sz)
 {
   char tmp[256];
 
@@ -226,7 +231,7 @@ OctaveArduinoClass::registerLibrary (LibraryBase *lib)
 }
 
 uint8_t
-OctaveArduinoClass::processMessage (uint8_t libid, uint8_t cmd, uint8_t *data, uint8_t sz)
+OctaveArduinoClass::processMessage (uint8_t libid, uint8_t cmd, uint8_t *data, uint16_t sz)
 {
   if (libid >= MAX_ARDUINO_LIBS || libs[libid] == 0)
     {
@@ -239,6 +244,11 @@ OctaveArduinoClass::processMessage (uint8_t libid, uint8_t cmd, uint8_t *data, u
       return 1;
     }
   return 0;
+}
+
+uint16_t OctaveArduinoClass::getMsgLen()
+{
+	return ((uint16_t)msg_hdr[STATE_SIZE0] << 8) | ((uint16_t)msg_hdr[STATE_SIZE1]);
 }
 
 #if defined(WIFI_STATIC_IP)
@@ -383,12 +393,16 @@ OctaveArduinoClass::runLoop()
             break;
           case STATE_CMD:
             msg_hdr[STATE_CMD] = ch;
-            msg_state = STATE_SIZE;
+            msg_state = STATE_SIZE0;
             break;
-          case STATE_SIZE:
-            msg_hdr[STATE_SIZE] = ch;
+          case STATE_SIZE0:
+            msg_hdr[STATE_SIZE0] = ch;
+            msg_state = STATE_SIZE1;
+            break;
+          case STATE_SIZE1:
+            msg_hdr[STATE_SIZE1] = ch;
             msg_datapos = 0;
-            if (ch > 0)
+            if (getMsgLen() > 0)
               msg_state = STATE_DATA;
             else
               msg_state = STATE_EOM;
@@ -397,7 +411,7 @@ OctaveArduinoClass::runLoop()
             if (msg_datapos < sizeof(msg_data))
               msg_data[msg_datapos] = ch;
             msg_datapos ++;
-            if (msg_datapos == msg_hdr[STATE_SIZE])
+            if (msg_datapos == getMsgLen())
               msg_state = STATE_EOM;
             break;
           default:
@@ -408,8 +422,7 @@ OctaveArduinoClass::runLoop()
       if(msg_state == STATE_EOM)
         {
           msg_state = STATE_SOH;
-
-          processMessage (msg_hdr[STATE_EXT], msg_hdr[STATE_CMD], msg_data, msg_hdr[STATE_SIZE]);
+          processMessage (msg_hdr[STATE_EXT], msg_hdr[STATE_CMD], msg_data, getMsgLen());
         }
     }
 

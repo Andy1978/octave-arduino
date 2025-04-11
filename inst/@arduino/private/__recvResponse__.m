@@ -27,11 +27,12 @@ function [dataOut, errcode] = __recvResponse__ (dev, libid, cmd, timeout, debug)
 # so try read what we need first without waiting ?
 
    # read in initial part
-   [tmpdataOut, tmpdataSize] = fread (dev, 4);
+   [tmpdataOut, tmpdataSize] = fread (dev, 5);
+
    if (debug)
      printf("<< "); printf("%d ", tmpdataOut); printf("\n");
    endif
-   if tmpdataSize < 4
+   if tmpdataSize < 5
      errcode = 1;
      dataOut = "Undersized packet header";
    elseif tmpdataOut(1) != hex2dec("A5") || tmpdataOut(2) != libid || (tmpdataOut(3) != cmd && tmpdataOut(3) < 253)
@@ -45,11 +46,11 @@ function [dataOut, errcode] = __recvResponse__ (dev, libid, cmd, timeout, debug)
 
      set(dev, "timeout", -1);
 
-     [tmpdataOut, tmpdataSize] = fread (dev, 4);
+     [tmpdataOut, tmpdataSize] = fread (dev, 5);
      if (debug)
        printf("<< "); printf("%d ", tmpdataOut); printf("\n");
      endif
-     if tmpdataSize < 4
+     if tmpdataSize < 5
        errcode = 1;
        dataOut = "Undersized packet header";
      elseif tmpdataOut(1) != hex2dec("A5") || tmpdataOut(2) != libid || (tmpdataOut(3) != cmd && tmpdataOut(3) != 255)
@@ -59,7 +60,7 @@ function [dataOut, errcode] = __recvResponse__ (dev, libid, cmd, timeout, debug)
    endif
 
    if(errcode == 0)
-     expectlen =  tmpdataOut(4);
+     expectlen = deserialize_from_uint8 (tmpdataOut(4:5), "uint16");
      if expectlen > 0
        [dataOut, tmpdataSize] = fread (dev, expectlen);
        if (debug)
