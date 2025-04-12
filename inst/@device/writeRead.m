@@ -26,7 +26,7 @@
 ## @seealso{arduino, device}
 ## @end deftypefn
 
-function dataOut = writeRead (this, dataIn)
+function dataOut = writeRead (this, dataIn, first_block_len = 0, delay_us = 0)
   dataOut = [];
 
   persistent ARDUINO_SPI_READ_WRITE = 2;
@@ -39,10 +39,16 @@ function dataOut = writeRead (this, dataIn)
     error("@device.writeRead: not a SPI device");
   endif
 
-  [tmp, sz] = sendCommand (this.parent, this.resourceowner, ARDUINO_SPI_READ_WRITE, [this.id uint8(dataIn)]);
-  if sz > 0
-    dataOut = tmp(2:end);
+  if (first_block_len > 255)
+    warning ("@device.writeRead: first_block_len clamped to 255");
   endif
+
+  if (delay_us > 255)
+    warning ("@device.writeRead: delay_us clamped to 255 us");
+  endif
+
+  out_buf = uint8([this.id delay_us first_block_len dataIn]);
+  [dataOut, sz] = sendCommand (this.parent, this.resourceowner, ARDUINO_SPI_READ_WRITE, out_buf);
 endfunction
 
 %!shared arduinos

@@ -170,7 +170,7 @@ OctaveSPILibrary::commandHandler (uint8_t cmdID, uint8_t* data, uint16_t datasz)
         }
       case ARDUINO_READ_WRITE_SPI:
 
-        if (datasz >= 2)
+        if (datasz >= 4)
           {
             SPIDevice * dev = getSPI (data[0]);
             if(dev == 0 || (dev->flags&USED)==0)
@@ -179,19 +179,35 @@ OctaveSPILibrary::commandHandler (uint8_t cmdID, uint8_t* data, uint16_t datasz)
                 return;
               }
 
+            uint8_t delay_us = data[1];
+            uint8_t first_block_len = data[2];
+            uint16_t data_len = datasz - 3;
+
+            if (first_block_len > data_len)
+              first_block_len = 0;
+
             // begin transaction
             SPI.beginTransaction (dev->settings);
 
             dev->set_cs(LOW);
             delayMicroseconds (dev->cs_setup);
 
-            // transfer the bytes
-            SPI.transfer (&data[1], datasz-1);
+
+            if (first_block_len && delay_us > 0)
+            {
+              // transfer the first block
+              SPI.transfer (&data[3], first_block_len);
+
+              delayMicroseconds (delay_us);
+            }
+
+            // transfer the rest
+            SPI.transfer (&data[3+first_block_len], data_len - first_block_len);
 
             dev->set_cs(HIGH);
             SPI.endTransaction ();
 
-            sendResponseMsg (cmdID, data, datasz);
+            sendResponseMsg (cmdID, &data[3], data_len);
           }
         else
           {
