@@ -76,7 +76,7 @@ function [dataOut, errcode] = __recvResponse__ (dev, libid, cmd, timeout, debug)
 	 # valid packet, but was coz we got an error
          errcode = 10;
 	 if expectlen == 0
-           dataOut = "Recieved error status";;
+           dataOut = "Received error status";
 	 else
            dataOut = char(dataOut);
 	 endif

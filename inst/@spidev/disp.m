@@ -22,11 +22,12 @@
 
 function disp (this)
   printf ("  arduino spidev object with fields of: \n\n");
-  printf ("   chipselectpin = %s\n", this.chipselectpin);
-  printf ("            mode = %d\n", this.mode);
-  printf ("        bitorder = %s\n", this.bitorder);
-  printf ("         bitrate = %d\n", this.bitrate);
-  printf ("            pins = ");
+  printf ("           chipselectpin = %s\n", this.chipselectpin);
+  printf ("                    mode = %d\n", this.mode);
+  printf ("                bitorder = %s\n", this.bitorder);
+  printf ("                 bitrate = %d\n", this.bitrate);
+  printf ("   chipselect_setup_time = %d\n", this.chipselect_setup_time);
+  printf ("                    pins = ");
   for i=1:numel(this.pins)
     printf("%s(%s) ", this.pins{i}.name, this.pins{i}.func)
   endfor

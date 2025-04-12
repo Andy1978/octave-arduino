@@ -34,6 +34,7 @@ function disp (this)
     printf ("         spimode = %d\n", this.devinfo.mode);
     printf ("        bitorder = %s\n", this.devinfo.bitorder);
     printf ("         bitrate = %d\n", this.devinfo.bitrate);
+    printf ("     cssetuptime = %d\n", this.devinfo.cssetuptime);
   elseif strcmp(this.interface, "Serial")
     printf ("      serialport = %d\n", this.devinfo.id);
     printf ("        baudrate = %d\n", this.devinfo.baudrate);

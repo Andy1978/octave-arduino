@@ -28,19 +28,17 @@ class SPIDevice
 {
   #define USED 1
   #define ENABLED 2
+
 public:
   uint8_t flags;
   uint8_t cspin;
-  uint8_t bitorder;
-  uint8_t mode;
+  uint16_t cs_setup;    // min delay in µs between CS and first edge of SCLK
+  SPISettings settings; // speedMaximum, dataOrder, dataMode
 
   SPIDevice();
-  uint8_t init(uint8_t id, uint8_t mode, uint8_t order);
+  uint8_t init(uint8_t id, uint8_t spi_mode, uint8_t spi_bitorder, uint32_t spi_bitrate, uint16_t spi_cs_setup);
   uint8_t free();
   void set_cs(uint8_t state);
-
-  int transfer(uint8_t *data, int sz);
-  SPISettings settings();
 };
 
 SPIDevice::SPIDevice ()
@@ -49,19 +47,12 @@ SPIDevice::SPIDevice ()
 }
 
 uint8_t
-SPIDevice::init (uint8_t id, uint8_t spi_mode, uint8_t spi_bitorder)
+SPIDevice::init (uint8_t id, uint8_t spi_mode, uint8_t spi_bitorder, uint32_t spi_bitrate, uint16_t spi_cs_setup)
 {
   flags = USED|ENABLED;
   cspin = id;
-
-  if (spi_mode == 0) mode = SPI_MODE0;
-  else if (spi_mode == 1) mode = SPI_MODE1;
-  else if (spi_mode == 2) mode = SPI_MODE2;
-  else if (spi_mode == 3) mode = SPI_MODE3;
-  else mode = SPI_MODE0;
-
-  bitorder = spi_bitorder;
-
+  cs_setup = spi_cs_setup;
+  settings = SPISettings (spi_bitrate, spi_bitorder? MSBFIRST: LSBFIRST, spi_mode);
   return 0;
 }
 
@@ -75,18 +66,6 @@ SPIDevice::free ()
 void SPIDevice::set_cs(uint8_t state)
 {
   digitalWrite (cspin, state);
-}
-
-SPISettings SPIDevice::settings()
-{
-  return SPISettings(4000000, bitorder==0 ? MSBFIRST : LSBFIRST , mode);
-}
-
-int
-SPIDevice::transfer (uint8_t *data, int sz)
-{
-  SPI.transfer (data, sz);
-  return 0;
 }
 
 #define MAX_SPI_DEVICES 5
@@ -131,25 +110,29 @@ OctaveSPILibrary::commandHandler (uint8_t cmdID, uint8_t* data, uint16_t datasz)
 #ifdef USE_SPI
       case ARDUINO_CONFIGSPI:
         {
-          if (datasz == 4)
+          if (datasz == 10)
             {
-              // spi id   0 (cs pin)
-              // enable   1
-              // mode ?   2
-              // byte order 3
-              // TODO: bit rate
-              SPIDevice * dev = getSPI (data[0]);
+              //               data
+              // spi id        0 (cs pin)
+              // enable        1
+              // mode          2
+              // bitorder      3
+              // bitrate       4..7
+              // cs_setup_time 8..9
 
-	      if(dev == 0)
-	        {
+              SPIDevice *dev = getSPI (data[0]);
+
+              if(dev == 0)
+                {
                   sendErrorMsg_P (ERRORMSG_INVALID_DEVICE);
-		  return;
-	        }
+                  return;
+                }
 
               if (data[1] == 1)
                 {
-                  //        cspin    mode     bitorder
-		  dev->init(data[0], data[2], data[3]);
+                  uint32_t bitrate = ((uint32_t)data[4]<<24) | ((uint32_t)data[5]<<16) | ((uint32_t)data[6]<<8) | data[7];
+                  uint16_t cs_setup_time = ((uint16_t)data[8]<<8) | data[9];
+                  dev->init(data[0], data[2], data[3], bitrate, cs_setup_time);
 
                   // TODO: first call only ?
                   SPI.begin ();
@@ -161,19 +144,18 @@ OctaveSPILibrary::commandHandler (uint8_t cmdID, uint8_t* data, uint16_t datasz)
                   // TODO: last call only
                   // SPI.end ();
 
-		  dev->free();
+                  dev->free();
                 }
               sendResponseMsg (cmdID,data, 2);
             }
           else if(datasz == 1)
             {
               SPIDevice * dev = getSPI (data[0]);
-
-	      if(dev == 0 || (dev->flags&USED)==0)
-	        {
+              if(dev == 0 || (dev->flags&USED)==0)
+                {
                   sendErrorMsg_P (ERRORMSG_INVALID_DEVICE);
-		  return;
-	        }
+                  return;
+                }
 
               // TODO: last call only
               // SPI.end ();
@@ -191,27 +173,22 @@ OctaveSPILibrary::commandHandler (uint8_t cmdID, uint8_t* data, uint16_t datasz)
         if (datasz >= 2)
           {
             SPIDevice * dev = getSPI (data[0]);
-
             if(dev == 0 || (dev->flags&USED)==0)
               {
                 sendErrorMsg_P (ERRORMSG_INVALID_DEVICE);
-		return;
-	      }
+                return;
+              }
 
             // begin transaction
-            SPI.beginTransaction (dev->settings());
+            SPI.beginTransaction (dev->settings);
 
-            // set CS low
             dev->set_cs(LOW);
-            delay (1);
+            delayMicroseconds (dev->cs_setup);
 
             // transfer the bytes
-	    dev->transfer(&data[1], datasz-1);
+            SPI.transfer (&data[1], datasz-1);
 
-            // set CS hi
             dev->set_cs(HIGH);
-            delay (1);
-            // endtransaction
             SPI.endTransaction ();
 
             sendResponseMsg (cmdID, data, datasz);

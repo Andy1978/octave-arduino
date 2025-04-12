@@ -54,6 +54,8 @@ classdef device < handle
   ## 'msbfirst' or 'lsbfirst'
   ## @item spimode
   ## SPI mode 0 - 3.
+  ## @item CSSetupTime
+  ## min delay in µs between CS and first edge of SCLK
   ## @end table
   ##
   ##
@@ -260,6 +262,7 @@ classdef device < handle
 
         bitorder_type = @(x) (ischar(x) && any(strcmp(lower(x), {"msbfirst", "lsbfirst"})));
         mode_type = @(x) (isnumeric(x) && x >= 0 && x <= 3);
+        cs_setup_time_type = @(x) (isnumeric(x) && x >= 0 && x <= 2^16-1);
 
         cspin = p.Results.SPIChipSelectPin;
 
@@ -272,11 +275,13 @@ classdef device < handle
           p.addParameter('SPIMode', 0, mode_type);
           p.addParameter('BitRate', 4000000, @isnumeric);
           p.addParameter('BitOrder', "msbfirst", bitorder_type);
+          p.addParameter('CSSetupTime', 5, cs_setup_time_type);
         else
           p.addParamValue('SPIChipSelectPin', cspin, pin_type);
           p.addParamValue('SPIMode', 0, mode_type);
           p.addParamValue('BitRate', 4000000, @isnumeric);
           p.addParamValue('BitOrder', "msbfirst", bitorder_type);
+          p.addParamValue('CSSetupTime', 5, cs_setup_time_type);
         endif
         p.parse(varargin{:});
 
@@ -284,6 +289,7 @@ classdef device < handle
         this.devinfo.mode = p.Results.SPIMode;
         this.devinfo.bitrate = p.Results.BitRate;
         this.devinfo.bitorder = tolower(p.Results.BitOrder);
+        this.devinfo.cssetuptime = p.Results.CSSetupTime;
 
         this.resourceowner = "spi";
 
@@ -350,12 +356,15 @@ classdef device < handle
             endif
           endfor
 
-          bitorder = 0;
-          if strcmp(this.devinfo.bitorder, 'lsbfirst')
-            bitorder = 1;
-          endif
+          bitorder = strcmp(this.devinfo.bitorder, 'msbfirst');
 
-          [tmp, sz] = sendCommand(this.parent, this.resourceowner, ARDUINO_SPI_CONFIG, [this.id 1 this.devinfo.mode bitorder]);
+          [tmp, sz] = sendCommand(this.parent, this.resourceowner, ARDUINO_SPI_CONFIG,
+                                 {this.id, "uint8",  ...               # library id
+                                 1, "uint8",  ...                      # 1 = enable
+                                 this.devinfo.mode, "uint8",  ...      # SPI_MODE0 .. SPI_MODE3
+                                 bitorder, "uint8",  ...               # 1 = MSBFIRST
+                                 this.devinfo.bitrate, "uint32",  ...  # SPI CLK in Hz
+                                 this.devinfo.cssetuptime, "uint16"}); # Delay after /CS in µs
 
           incrementResourceCount(this.parent, this.resourceowner);
         catch

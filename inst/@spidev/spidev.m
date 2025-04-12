@@ -55,6 +55,8 @@ classdef spidev < handle
   ## Bitorder set for object
   ## @item chipselectpin
   ## Pin used for chipselect
+  ## @item chipselect_setup_time
+  ## Delay time CS edge to first SCLK edge in us
   ## @end table
   ##
   ## @seealso{arduino, readWrite}
@@ -69,6 +71,7 @@ classdef spidev < handle
     parent = [];
     resourceowner = "spi";
     pins = {};
+    chipselect_setup_time = 5; # in us
   endproperties
 
   methods (Access = public)
@@ -121,6 +124,11 @@ classdef spidev < handle
           if this.bitorder != "msbfirst" && this.bitorder != "lsbfirst"
             error("bitorder should be 'msbfirst' or 'lsbfirst'");
           endif
+        elseif strcmp (propname, "chipselect_setup_time")
+          if !isnumeric (propvalue)
+            error("chipselect_setup_time should be a number")
+          endif
+          this.chipselect_setup_time = propvalue;
         endif
 
       endfor
@@ -194,12 +202,15 @@ classdef spidev < handle
           endif
         endfor
 
-        bitorder = 0;
-        if strcmp(this.bitorder, 'lsbfirst')
-          bitorder = 1;
-        endif
+        bitorder = strcmp(this.bitorder, 'msbfirst');
 
-        [tmp, sz] = sendCommand(this.parent, this.resourceowner, ARDUINO_SPI_CONFIG, [this.id 1 this.mode bitorder]);
+        [tmp, sz] = sendCommand(this.parent, this.resourceowner, ARDUINO_SPI_CONFIG,
+                               {this.id, "uint8",  ...                 # library id
+                               1, "uint8",  ...                        # 1 = enable
+                               this.mode, "uint8",  ...                # SPI_MODE0 .. SPI_MODE3
+                               bitorder, "uint8",  ...                 # 1 = MSBFIRST
+                               this.bitrate, "uint32",  ...            # SPI CLK in Hz
+                               this.chipselect_setup_time, "uint16"}); # Delay after /CS in µs
 
         incrementResourceCount(ar, this.resourceowner);
       catch

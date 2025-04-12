@@ -19,7 +19,7 @@
 ## Author: jdonoghue <jdonoghue@JYRW4S1>
 ## Created: 2018-05-15
 
-function [dataOut, errcode] = __sendCommand__ (obj, libid, cmd, data, timeout)
+function [dataOut, errcode] = __sendCommand__ (obj, libid, cmd, data = [], timeout = 0.5)
    if nargin < 3
      error ("@arduino.__sendCommand__: expected command");
    endif
@@ -29,9 +29,6 @@ function [dataOut, errcode] = __sendCommand__ (obj, libid, cmd, data, timeout)
      error ("@arduino.__sendCommand__: not connected to a arduino");
    endif
 
-   % connected yet ?
-
-   % simple procol here, each field is a byte
    % sends A5 EXT CMD datasize [data,,,]
    % currently ext is 0 - may use later to identify module to send to ?
    % A5 00 00 00 = reset
@@ -39,26 +36,18 @@ function [dataOut, errcode] = __sendCommand__ (obj, libid, cmd, data, timeout)
    dataOut = [];
    errcode = 0;
 
-   if (nargin < 4)
-     data = [];
-   endif
-
-   if (nargin < 5)
-     timeout = 0.5;
-   endif
-
    if iscell(data)
      data = cell2mat(data);
    endif
 
-   hdr = uint8([0xA5 libid cmd serialize_to_uint8(numel(data),"uint16")]);
-
    set(obj.connected, "timeout", timeout);
 
-   len = fwrite(obj.connected, [hdr data]);
+   send_buf = uint8([0xA5 libid cmd serialize_to_uint8(numel(data),"uint16") data]);
+
+   len = fwrite(obj.connected, send_buf);
 
    if (obj.debug)
-     printf(">> "); printf("%d ", [hdr data]); printf("\n");
+     printf(">> "); printf("%d ", send_buf); printf("\n");
    endif
 
    [dataOut, errcode] = __recvResponse__ (obj.connected, libid, cmd, timeout, obj.debug);

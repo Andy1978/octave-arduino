@@ -39,8 +39,9 @@
 ## @seealso{arduino}
 ## @end deftypefn
 
-function [dataOut,payloadSize] = sendCommand (obj, libname, commandid, data, timeout)
-  if nargin < 3
+function [dataOut,payloadSize] = sendCommand (obj, libname, commandid, data = [], timeout = 5)
+
+  if (nargin < 3)
     error ('sendCommand: missing expected arguments of libname, commandid');
   endif
 
@@ -49,21 +50,26 @@ function [dataOut,payloadSize] = sendCommand (obj, libname, commandid, data, tim
   else
     libid = obj.get_lib(libname);
 
-    if libid == -1
+    if (libid == -1)
       error ("sendCommand: unknown or unprogrammed library '%s'.", libname);
     endif
   endif
 
-  if ! isnumeric (commandid)
+  if (! isnumeric (commandid))
     error ('sendCommand: command id should be a number');
   endif
 
-  if (nargin < 4)
-     data = [];
-  endif
-
-  if (nargin < 5)
-     timeout = 5;
+  ## TODO: document the possiblility to use value/type pairs
+  if (iscell (data))
+    # expect value + type pairs
+    if (mod (numel (data), 2))
+      error ("@arduino.sendCommand: expect data to be value + type pairs if cell");
+    endif
+    tmp = [];
+    for k = 1:2:numel (data)
+      tmp = [tmp serialize_to_uint8(data{k},data{k+1})];
+    endfor
+    data = tmp;
   endif
 
   [dataOut, status] = __sendCommand__ (obj, libid, commandid, data, timeout);
