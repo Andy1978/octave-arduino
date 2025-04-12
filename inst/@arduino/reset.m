@@ -39,4 +39,6 @@ endfunction
 %! ar = arduino();
 %! assert(!isempty(ar));
 %! reset(ar);
-%! pause(1);
+%! # devices which emulate a serial port, like uno_minima_r4 may need
+%! # approximately 1.3s to come back -> add some margin
+%! pause(2);
