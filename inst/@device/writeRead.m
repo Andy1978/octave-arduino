@@ -47,7 +47,7 @@ function dataOut = writeRead (this, dataIn, first_block_len = 0, delay_us = 0)
     warning ("@device.writeRead: delay_us clamped to 255 us");
   endif
 
-  out_buf = uint8([this.id delay_us first_block_len dataIn]);
+  out_buf = [uint8(this.id) uint8(delay_us) uint8(first_block_len) uint8(dataIn)]);
   [dataOut, sz] = sendCommand (this.parent, this.resourceowner, ARDUINO_SPI_READ_WRITE, out_buf);
 endfunction
 
