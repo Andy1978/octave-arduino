@@ -20,6 +20,7 @@
 
 #define ARDUINO_CONFIGSPI   1
 #define ARDUINO_READ_WRITE_SPI 2
+#define ARDUINO_READ_WRITE_REP_SPI 3
 
 #ifdef USE_SPI
 #include <SPI.h>
@@ -169,6 +170,7 @@ OctaveSPILibrary::commandHandler (uint8_t cmdID, uint8_t* data, uint16_t datasz)
           break;
         }
       case ARDUINO_READ_WRITE_SPI:
+      case ARDUINO_READ_WRITE_REP_SPI:
 
         if (datasz >= 4)
           {
@@ -186,28 +188,40 @@ OctaveSPILibrary::commandHandler (uint8_t cmdID, uint8_t* data, uint16_t datasz)
             if (first_block_len > data_len)
               first_block_len = 0;
 
+            // start of dataIn
+            uint8_t *p = &data[3];
+
+            if (cmdID == ARDUINO_READ_WRITE_REP_SPI && datasz >= 6)
+              {
+                uint16_t n_end_repeat = (((uint16_t)data[3])<<8) | ((uint16_t)data[4]);
+                p += 2;
+                data_len -= 2;
+                // repeat the last byte n_end_repeat times
+                for (uint16_t k = 0; k < n_end_repeat; ++k)
+                  *(p + data_len + k) = *(p + data_len - 1);
+                data_len += n_end_repeat;
+            }
+
             // begin transaction
             SPI.beginTransaction (dev->settings);
 
             dev->set_cs(LOW);
             delayMicroseconds (dev->cs_setup);
 
-
             if (first_block_len && delay_us > 0)
             {
               // transfer the first block
-              SPI.transfer (&data[3], first_block_len);
-
+              SPI.transfer (p, first_block_len);
               delayMicroseconds (delay_us);
             }
 
             // transfer the rest
-            SPI.transfer (&data[3+first_block_len], data_len - first_block_len);
+            SPI.transfer (p+first_block_len, data_len - first_block_len);
 
             dev->set_cs(HIGH);
             SPI.endTransaction ();
 
-            sendResponseMsg (cmdID, &data[3], data_len);
+            sendResponseMsg (cmdID, p, data_len);
           }
         else
           {

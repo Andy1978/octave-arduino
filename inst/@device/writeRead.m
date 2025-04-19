@@ -29,7 +29,8 @@
 function dataOut = writeRead (this, dataIn, first_block_len = 0, delay_us = 0)
   dataOut = [];
 
-  persistent ARDUINO_SPI_READ_WRITE = 2;
+  persistent ARDUINO_READ_WRITE_SPI = 2;
+  persistent ARDUINO_READ_WRITE_REP_SPI = 3;
 
   if nargin < 2
     error ("@device.writeRead: expected dataIn");
@@ -47,8 +48,30 @@ function dataOut = writeRead (this, dataIn, first_block_len = 0, delay_us = 0)
     warning ("@device.writeRead: delay_us clamped to 255 us");
   endif
 
-  out_buf = [uint8(this.id) uint8(delay_us) uint8(first_block_len) uint8(dataIn)]);
-  [dataOut, sz] = sendCommand (this.parent, this.resourceowner, ARDUINO_SPI_READ_WRITE, out_buf);
+  # build command header
+  cmd_hdr = {this.id, "uint8", ...
+             delay_us, "uint8", ...  # delay after the first "first_block_len" bytes have been transmitted
+             first_block_len, "uint8"};
+
+  # Optimization: Check if dataIn has repetitions at the end.
+  # This is typically the case if the read data is bigger than the
+  # write data and thus there are many trailing zeros.
+  n_end_repeat = find ([diff(int16(dataIn(end:-1:(first_block_len+1)))), 1], 1) - 1;
+
+  if (n_end_repeat > 0)
+    # append number of repetitions to command header
+    cmd_hdr = horzcat (cmd_hdr, {n_end_repeat, "uint16"});
+    # remove repetitions at the end
+    dataIn(end-n_end_repeat+1:end) = [];
+    cmd = ARDUINO_READ_WRITE_REP_SPI;
+  else
+    cmd = ARDUINO_READ_WRITE_SPI;
+  endif
+
+  #this.parent.debug = 1;
+  # append dataIn to command_header
+  [dataOut, sz] = sendCommand (this.parent, this.resourceowner, cmd, horzcat (cmd_hdr, {dataIn, "uint8"}));
+
 endfunction
 
 %!shared arduinos
