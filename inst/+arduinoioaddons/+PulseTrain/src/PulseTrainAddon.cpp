@@ -21,6 +21,7 @@
 #define MAX_PULSETRAINS 8
 #define PULSETRAIN_START  0x01
 #define PULSETRAIN_RELEASE  0x02
+#define PULSETRAIN_STATUS  0x03
 
 #if __BYTE_ORDER__ != __ORDER_LITTLE_ENDIAN__
 #error Code below only works on little endian MCUs
@@ -195,6 +196,20 @@ void PulseTrainAddon::commandHandler(uint8_t cmdID, uint8_t* data, uint16_t data
           {
             pt->release ();
             sendResponseMsg(cmdID, data, 1);
+          }
+        else
+          {
+            sendErrorMsg_P (ERRORMSG_INVALID_ARGS);
+          }
+        break;
+      }
+      case PULSETRAIN_STATUS:
+      {
+        PulseTrain *pt = getPulseTrain (data[0]);
+        if (pt)
+          {
+            *((uint16_t*)data) = pt->cycles_left;
+            sendResponseMsg(cmdID, data, 2);
           }
         else
           {

@@ -22,10 +22,10 @@ classdef PulseTrain < arduinoio.LibraryBase
 
   properties(Access = public)
     polarity = 1;
-		initial_delay = 0;
-		pulse_width = 1000; # 1 ms
-		pulse_period = 10000; # 10 ms
-		cycles = 42;
+    initial_delay = 0;
+    pulse_width = 1000; # 1 ms
+    pulse_period = 10000; # 10 ms
+    cycles = 42;
   endproperties
 
   properties(GetAccess = public, SetAccess = private)
@@ -49,6 +49,7 @@ classdef PulseTrain < arduinoio.LibraryBase
     # command will send to the arduino
     START_COMMAND = 0x01;
     RELEASE_COMMAND = 0x02;
+    STATUS_COMMAND = 0x03;
   endproperties
 
   methods
@@ -63,24 +64,24 @@ classdef PulseTrain < arduinoio.LibraryBase
 
       validatePin(obj.Parent, varargin{1}, 'digital')
       obj.pin = getPinInfo(obj.Parent, varargin{1});
-			configurePin(obj.Parent, obj.pin.name, "digitaloutput")
-			configurePinResource (obj.Parent, obj.pin.name, obj.LibraryName, "digitaloutput", true);
+      configurePin(obj.Parent, obj.pin.name, "digitaloutput")
+      configurePinResource (obj.Parent, obj.pin.name, obj.LibraryName, "digitaloutput", true);
 
       obj.cleanup = onCleanup (@() sendCommand(obj.Parent, obj.LibraryName, obj.RELEASE_COMMAND, uint8 (obj.pin.terminal)));
 
     endfunction
 
     function start(obj)
-			data = zeros (1, 16, "uint8");
-			data(1) = obj.pin.terminal;
-			data(2) = obj.polarity;
-			data(3:6)   = typecast (uint32(obj.initial_delay), "uint8");
-			data(7:10)  = typecast (uint32(obj.pulse_width), "uint8");
-			data(11:14) = typecast (uint32(obj.pulse_period), "uint8");
-			data(15:16) = typecast (uint16(obj.cycles), "uint8");
+      data = zeros (1, 16, "uint8");
+      data(1) = obj.pin.terminal;
+      data(2) = obj.polarity;
+      data(3:6)   = typecast (uint32(obj.initial_delay), "uint8");
+      data(7:10)  = typecast (uint32(obj.pulse_width), "uint8");
+      data(11:14) = typecast (uint32(obj.pulse_period), "uint8");
+      data(15:16) = typecast (uint16(obj.cycles), "uint8");
 
       #obj.Parent.debug = 1;
-			[tmp, sz] = sendCommand(obj.Parent, obj.LibraryName, obj.START_COMMAND, data);
+      [tmp, sz] = sendCommand(obj.Parent, obj.LibraryName, obj.START_COMMAND, data);
 
     endfunction
 
@@ -94,6 +95,12 @@ classdef PulseTrain < arduinoio.LibraryBase
       #  configurePin(obj.Parent, obj.PinInfo{i}.name, obj.PinInfo{i}.mode)
       #endfor
 
+    endfunction
+
+    function ret = status (obj)
+      [ret, sz] = sendCommand(obj.Parent, obj.LibraryName, obj.STATUS_COMMAND, uint8(obj.pin.terminal));
+      assert (sz, 2);
+      ret = typecast (ret, "uint16");
     endfunction
 
     function disp(this)
