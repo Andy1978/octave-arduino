@@ -1,6 +1,17 @@
 <center>Octave Arduino Toolkit</center>
 ----------------------
 
+This is a fork of the "original" repo https://github.com/gnu-octave/octave-arduino/
+
+I made some incomaptible changes which I try to backport to upstream soon:
+- Increase maximal size of message from 255 byte to 65535
+- Add suport for on-chip DAC (for example for uno minima R4)
+- New Addon PulseTrain
+- SPI: implement bitrate and CSSetupTime
+- SPI: add two block transfer
+
+See https://github.com/gnu-octave/octave-arduino/compare/main...Andy1978:octave-arduino:main
+
 ---
 
 Introduction
