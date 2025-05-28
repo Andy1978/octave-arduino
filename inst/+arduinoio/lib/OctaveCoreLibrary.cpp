@@ -139,7 +139,7 @@ static const int8_t map_config_mode[] PROGMEM =
   OUTPUT, // servo
   OUTPUT, // spi TODO ?
   INPUT,  // interrupt
-  OUTPUT, // dac
+  -1,     // dac
   -1,     // reserved
 };
 
@@ -281,10 +281,13 @@ OctaveCoreLibrary::commandHandler (uint8_t cmdID, uint8_t* data, uint16_t datasz
           {
             int mode = get_mode (data[1]);
             pinconfig[data[0]] = data[1];
+
+            if (data[1] == 10) // dac
+              analogWriteResolution (8); // ist eigentlich default, trotzdem schreiben
+
             if (mode != -1)
-              {
-                pinMode (data[0], mode);
-              }
+              pinMode (data[0], mode);
+
             sendResponseMsg (cmdID, data, 0);
           }
         else
